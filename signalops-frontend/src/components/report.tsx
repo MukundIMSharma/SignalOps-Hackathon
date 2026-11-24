@@ -227,6 +227,8 @@ export function Activity({ events }: { events: StreamEvent[] }) {
               </div>
               <div className="truncate pl-5 text-[11px] text-zinc-500">{String(e.summary)}</div>
             </div>
+          ) : e.type === 'capability' ? (
+            <span className="rounded bg-emerald-500/10 px-1.5 py-0.5 text-emerald-300 ring-1 ring-emerald-500/40">★ New capability in use: <span className="font-mono">{String(e.tool)}</span> ({String(e.server)} MCP)</span>
           ) : e.type === 'stage' ? (
             <span className="mt-1 text-[11px] font-semibold uppercase tracking-wide text-indigo-300">▸ {String(e.stage)}</span>
           ) : e.type === 'evidence' ? (

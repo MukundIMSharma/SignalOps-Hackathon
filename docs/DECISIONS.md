@@ -36,3 +36,5 @@ Format: `date — decision — reason`
 - 2026-11-24 — Approval re-validates via MCP at execution time and counts earlier simulated transfers — a stale plan or a second investigation can't over-commit W2 stock.
 - 2026-11-24 — Idempotency = one decision per `{investigation}:{action}`; status flips before any await, so no lock is needed.
 - 2026-11-24 — Audit log is append-only JSONL on disk — survives restarts even though investigations are in memory.
+- 2026-11-24 — Agent calls `get_inventory_incidents` only if the MCP server lists it — before discovery a blind call would turn every report "partial"; after discovery it is used automatically with no backend restart.
+- 2026-11-24 — Incident endpoint derives incidents from failed SyncStatus rows (no new table) — two small edits to paste live; output matches the plan's illustrative JSON exactly.

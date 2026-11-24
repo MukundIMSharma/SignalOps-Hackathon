@@ -20,6 +20,7 @@ ENDPOINTS = {  # tool -> API path template, for evidence source_endpoint
     "get_delayed_orders": "/orders/delayed", "get_support_tickets": "/tickets", "get_shipment_status": "/shipments",
     "get_customer_details": "/customers/{customer_id}", "get_inventory_sync_status": "/sync/status",
     "get_product_stock": "/stock/{product_id}", "get_warehouse_status": "/warehouses",
+    "get_inventory_incidents": "/inventory/incidents",
 }
 
 
@@ -91,6 +92,10 @@ class Investigation:
         self.on_event({"type": "stage", "stage": "inventory"})
         syncs = await self.items("inventory", "get_inventory_sync_status")
         warehouses = await self.items("inventory", "get_warehouse_status")
+        incidents = None
+        if "get_inventory_incidents" in getattr(self.call, "tools", {}).get("inventory", set()):
+            self.on_event({"type": "capability", "tool": "get_inventory_incidents", "server": "inventory"})
+            incidents = await self.items("inventory", "get_inventory_incidents")
 
         if delayed is None:
             return self._report(request, findings=[Finding(
@@ -161,6 +166,12 @@ class Investigation:
                     {"warehouses": {w["warehouse_id"]: w["available_quantity"] for w in st["warehouses"]},
                      "last_updated": at["last_updated"] if at else None, "reorder_threshold": st["reorder_threshold"]},
                     {"product_id": p}))
+            for inc in incidents or []:
+                if inc["warehouse_id"] == wh and inc["product_id"] in products:
+                    ev.append(self.add_evidence(
+                        f"Inventory system incident {inc['incident_id']} ({inc['severity']}): {inc['incident_type']} "
+                        f"for {inc['product_id']} at {wh} since {inc['occurred_at']}", "confirmed", "inventory",
+                        "get_inventory_incidents", [inc["incident_id"], inc["product_id"], wh], inc))
             wh_status = next((w["status"] for w in warehouses or [] if w["warehouse_id"] == wh), None)
             if wh_status and wh_status != "operational":
                 ev.append(self.add_evidence(f"Warehouse {wh} status is {wh_status}", "confirmed", "inventory",

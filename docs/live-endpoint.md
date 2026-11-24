@@ -1,0 +1,73 @@
+# Live demo: add `GET /inventory/incidents` (Milestone 6)
+
+Paste-ready. Two edits in `nova-inventory/`, then restart + discover.
+
+## 1. New file `nova-inventory/app/routes/incidents.py`
+```python
+from datetime import datetime
+
+from fastapi import APIRouter, Depends
+from pydantic import BaseModel
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
+from ..database import AS_OF, get_db
+from ..models import SyncStatus
+
+router = APIRouter(tags=["incidents"])
+
+
+class IncidentOut(BaseModel):
+    incident_id: str
+    severity: str
+    product_id: str
+    warehouse_id: str
+    incident_type: str
+    occurred_at: datetime
+    description: str
+
+
+class IncidentPage(BaseModel):
+    items: list[IncidentOut]
+    total: int
+    as_of: datetime = AS_OF
+
+
+@router.get("/inventory/incidents", response_model=IncidentPage)
+def get_inventory_incidents(db: Session = Depends(get_db)):
+    """Open inventory incidents (failed syncs) per product and warehouse."""
+    failed = db.scalars(select(SyncStatus).where(SyncStatus.status == "failed").order_by(SyncStatus.sync_id))
+    pairs = [(s, p) for s in failed for p in s.affected_products]
+    items = [IncidentOut(incident_id=f"INV-2026-{42 + i:03d}", severity=s.severity, product_id=p,
+                         warehouse_id=s.warehouse_id, incident_type="inventory_sync_failure",
+                         occurred_at=s.failing_since,
+                         description="Inventory synchronization failed; availability may be stale.")
+             for i, (s, p) in enumerate(pairs)]
+    return IncidentPage(items=items, total=len(items))
+```
+
+## 2. `nova-inventory/app/main.py` — register it
+```python
+from .routes import analytics, incidents, products, stock, sync, warehouses
+...
+for r in (products, stock, warehouses, sync, analytics, incidents):
+```
+
+## 3. Restart, discover, verify
+```bash
+# restart the inventory API (Ctrl+C its terminal, then)
+cd nova-inventory && .venv/Scripts/python -m uvicorn app.main:app --port 8002
+curl localhost:8002/inventory/incidents            # INV-2026-042, SKU-104, W1, critical
+# rebuild the MCP server from the changed code (same server name keeps the same server_id)
+synapse -y build --auto --discover --server-name nova-inventory --base-url http://localhost:8002 \
+  --endpoints "list_products,get_product_details,get_warehouse_inventory,get_low_stock_products,get_product_stock,get_warehouse_status,get_inventory_sync_status,get_stock_health,get_inventory_incidents"
+```
+4. UI → Systems / MCP → **Refresh tools**: `get_inventory_incidents` shows **★ newly discovered** (open the page once *before* step 1 so the baseline is the old tool list).
+5. UI → Investigations → **Run investigation**: activity shows **★ New capability in use: get_inventory_incidents**, root cause gains evidence `Inventory system incident INV-2026-042 (critical)…`.
+
+## Reset after a rehearsal
+```bash
+git checkout nova-inventory/app/main.py && rm nova-inventory/app/routes/incidents.py
+# restart inventory API, then rebuild WITHOUT get_inventory_incidents (command from docs/synapse-setup.md)
+```
+After the real demo: keep the endpoint, flip the absence assert in `nova-inventory/tests/test_api.py` into a test for it, commit.

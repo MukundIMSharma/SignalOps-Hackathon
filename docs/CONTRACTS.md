@@ -52,7 +52,8 @@ Entities:
 - **SyncStatus:** sync_id, source, warehouse_id, status (success|failed), last_attempt, last_success, failing_since (nullable), error_code, error_message, affected_products[], severity (info|warning|critical)
 - **StockHealth:** as_of, products, warehouses, warehouses_by_status{}, total_available_units, total_reserved_units, low_stock_positions, out_of_stock_positions, failed_syncs, products_affected_by_sync_failures[]
 
-Reserved for Milestone 6 live demo — **not implemented, a test asserts it is absent:** `GET /inventory/incidents`
+Reserved for the live demo — **not in code; a test asserts it is absent.** Paste-ready implementation: `docs/live-endpoint.md`. operationId/tool `get_inventory_incidents`, returns `{items[...], total, as_of}`:
+`GET /inventory/incidents`
 ```json
 { "incident_id": "INV-2026-042", "severity": "critical", "product_id": "SKU-104", "warehouse_id": "W1",
   "incident_type": "inventory_sync_failure", "occurred_at": "2026-11-23T09:42:00",
@@ -111,7 +112,9 @@ After a decision (M5, implemented): approver, decided_at, decision_note, idempot
   actions[Action], gaps[str], trace[{seq, server, tool, args, ok, ms, summary}],
   prioritization_weights{}, narrative{text, source: llm|template, model, error} }
 ```
-Live events (`on_event`): `{type: stage, stage}`, `{type: tool_call, ...ToolEvent}`, `{type: evidence, evidence_id, claim, status}`.
+The agent calls `get_inventory_incidents` only when the inventory MCP server lists it (`call.tools`); it then adds incident evidence to the root cause.
+
+Live events (`on_event`): `{type: capability, tool, server}` (new tool in use), `{type: stage, stage}`, `{type: tool_call, ...ToolEvent}`, `{type: evidence, evidence_id, claim, status}`.
 Finding statuses: root cause is `likely` at best (facts confirmed, causality inferred); `unknown` when a source system is down.
 
 ## SignalOps backend API (for frontend) — TBD

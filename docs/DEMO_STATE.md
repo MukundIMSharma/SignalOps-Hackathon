@@ -60,8 +60,9 @@ cd signalops-backend && .venv/Scripts/python investigate.py
 cd signalops-backend  && .venv/Scripts/python -m uvicorn main:app --port 8000
 cd signalops-frontend && npm run dev        # open http://localhost:5173
 ```
-TBD: live `synapse build --discover`.
+Live discovery step: follow `docs/live-endpoint.md` exactly (paste-ready code + commands + reset).
 
 ## Rehearsals
 | # | Date | Steps passed | Notes |
 |---|---|---|---|
+| 1 | 2026-11-24 | M6 discovery only: endpoint added from docs/live-endpoint.md → restart → `synapse build --discover` (3.7s, same server_id) → Systems shows ★ newly discovered (8→9 tools) → investigation shows ★ New capability + evidence INV-2026-042 → reset to 8 tools | passed; screenshots in docs/demo-backup/ |

@@ -59,12 +59,12 @@
 - [x] Audit trail
 
 ## Milestone 6 — Synapse live discovery
-- [ ] Add `/inventory/incidents`
-- [ ] Restart API
-- [ ] `synapse build --discover`
-- [ ] Verify new tool
-- [ ] Agent calls new tool
-- [ ] UI shows updated tools
+- [x] Add `/inventory/incidents` (rehearsed; repeat live at demo)
+- [x] Restart API (rehearsed; repeat live at demo)
+- [x] `synapse build --discover` (rehearsed; repeat live at demo)
+- [x] Verify new tool (rehearsed; repeat live at demo)
+- [x] Agent calls new tool (rehearsed; repeat live at demo)
+- [x] UI shows updated tools (rehearsed; repeat live at demo)
 
 ## Milestone 7 — Polish, testing, submission
 - [ ] Run full test suite

@@ -98,3 +98,27 @@ def test_truncated_list_flagged():
         return d
     r = run(truncating)
     assert r["status"] == "partial" and any("truncated" in g for g in r["gaps"])
+
+
+def test_uses_incidents_tool_only_when_discovered():
+    before = fake_call()
+    r = run(before)
+    assert not any(t == "get_inventory_incidents" for _, t, _ in before.calls) and r["gaps"] == []
+
+    after = fake_call()
+    after.tools = {"orders": set(), "inventory": {"get_inventory_incidents"}}
+    inc = {"incident_id": "INV-2026-042", "severity": "critical", "product_id": "SKU-104", "warehouse_id": "W1",
+           "incident_type": "inventory_sync_failure", "occurred_at": "2026-11-23T09:42:00",
+           "description": "Inventory synchronization failed; availability may be stale."}
+    inner = after
+
+    async def with_incidents(server, tool, args):
+        if tool == "get_inventory_incidents":
+            return {"items": [inc], "total": 1}
+        return await inner(server, tool, args)
+    with_incidents.tools = after.tools
+    r = run(with_incidents)
+    root = r["findings"][0]
+    ev = {e["evidence_id"]: e for e in r["evidence"]}
+    assert any(ev[i]["source_tool"] == "get_inventory_incidents" for i in root["evidence_ids"])
+    assert root["status"] == "likely" and r["gaps"] == []

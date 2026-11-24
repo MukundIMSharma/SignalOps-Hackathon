@@ -47,3 +47,4 @@ cd signalops-backend
 .venv/Scripts/python -m pytest -q tests/test_mcp_tools.py   # 3 passed
 ```
 - **Install the MCP runner globally:** `npm install -g @2ndbrainlabs-ai/synapse-mcp` (v0.0.4). Session start drops from 9–20s (`npx -y` registry check) to ~2s for both servers. `mcp_clients/servers.py` uses `synapse-mcp` if on PATH, else npx.
+- **Live discovery verified (rehearsal 2026-11-24):** rebuild with `--discover` and the extra endpoint in `--endpoints` took 3.7s, same server_id, tool listed immediately by a fresh MCP session. Removing it = rebuild without it. Full script: `docs/live-endpoint.md`.

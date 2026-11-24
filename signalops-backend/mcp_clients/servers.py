@@ -60,4 +60,7 @@ async def open_caller():
                 raise ToolError(f"{tool}: {body}")
             return body
 
+        # tool names per connected server, so the agent can use tools added by `synapse build --discover`
+        call.tools = {n: {t.name for t in (await s.list_tools()).tools} for n, s in sessions.items()
+                      if not isinstance(s, Exception)}
         yield call
