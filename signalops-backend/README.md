@@ -8,9 +8,11 @@ python -m venv .venv && .venv/Scripts/python -m pip install -r requirements.txt
 .venv/Scripts/python list_tools.py            # tools on both MCP servers
 .venv/Scripts/python investigate.py           # terminal investigation (add --json for the full report)
 .venv/Scripts/python -m pytest -q             # unit + MCP integration tests
+.venv/Scripts/python -m uvicorn main:app --port 8000   # HTTP API + SSE for the frontend
 ```
 
 - `agent/orchestrator.py` — fixed stages, bounded tool calls (budget 60, 1 retry, 20s timeout), evidence, findings, actions
 - `agent/correlation.py`, `impact.py`, `prioritization.py` — deterministic logic (no LLM)
 - `agent/narrative.py` + `prompts/report_writer.md` — Gemini executive summary; labelled template fallback
-- `mcp_clients/servers.py` — Synapse MCP stdio sessions (`npx @2ndbrainlabs-ai/synapse-mcp`)
+- `mcp_clients/servers.py` — Synapse MCP stdio sessions (`npm i -g @2ndbrainlabs-ai/synapse-mcp` for ~2s startup; falls back to npx)
+- `main.py` — HTTP API + SSE (see docs/CONTRACTS.md)
