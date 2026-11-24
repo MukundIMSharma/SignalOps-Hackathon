@@ -46,7 +46,7 @@ Cross-system questions:
 ## Commands
 ```powershell
 powershell -File scripts\start-demo.ps1 -Reset   # reseed + start all 4 + wait for health
-python scriptsehearse.py 5                     # automated end-to-end check
+python scripts\rehearse.py 5                     # automated end-to-end check
 ```
 Manual equivalents:
 ```bash
