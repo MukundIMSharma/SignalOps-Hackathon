@@ -84,3 +84,6 @@ python scripts\rehearse.py 5                               # end-to-end against 
 - The Gemini free tier is slow or overloaded at times. Gemini only writes the executive summary; if it fails, a clearly labelled template summary is shown. **No number or finding depends on the LLM.**
 - Investigations and the simulated ledger are in memory (the audit log is on disk). All actions are simulated; customer notices are drafts and are never sent.
 - All data is fictional and deterministic, with a fixed demo clock (`2026-11-24T12:00`).
+
+## License
+MIT, see [LICENSE](LICENSE).

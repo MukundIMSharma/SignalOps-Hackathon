@@ -34,7 +34,7 @@ Status as of 2026-11-24. ✅ verified (how) · 🟡 ready, needs the live demo �
 | Environment example | ✅ | `.env.example` |
 | No secrets | ✅ | `git grep` + full-history scan for key patterns: 0 hits; `.env`, `.synapse/config.json` ignored |
 | Tests | ✅ | 12 + 9 + 37 automated; `scripts/rehearse.py` |
-| License | ⬜ | not chosen (owner decision) |
+| License | ✅ | MIT, `LICENSE` |
 
 ## Presentation (human)
 | Item | Status |

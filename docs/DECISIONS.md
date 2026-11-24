@@ -41,3 +41,4 @@ Format: `date — decision — reason`
 - 2026-11-24 — Incident timeline built from source timestamps in the orchestrator (sync last_success/failing_since, dispatch dates, tickets, as_of) — plan §13 report section, no new tool calls.
 - 2026-11-24 — MCP server ids overridable via ORDERS_/INVENTORY_MCP_SERVER_ID (defaults = ours) — a fresh clone can point at its own Synapse servers without code edits.
 - 2026-11-24 — start-demo.ps1 health-checks 127.0.0.1, not localhost — PowerShell 5.1 tries ::1 first and uvicorn listens on IPv4 only.
+- 2026-11-25 — MIT license — common open-source hackathon default; lets judges and others reuse the code with attribution.
