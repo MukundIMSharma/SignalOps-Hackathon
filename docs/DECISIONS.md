@@ -13,3 +13,4 @@ Format: `date — decision — reason`
 - 2026-11-24 — operationId = route function name = intended MCP tool name — so Synapse-generated tools get readable names.
 - 2026-11-24 — Skipped optional `lifetime_value` (Customer) and `unit_price` (Product) — plan marks optional; Orders is source of order value.
 - 2026-11-24 — Python 3.14 + FastAPI 0.165 / SQLAlchemy 2.1.9 / Pydantic 2.14.4, one venv per API — installed versions, keeps systems independent.
+- 2026-11-24 — LLM = Google Gemini Flash (free tier), via `GEMINI_API_KEY` — user choice; model id to verify before use.

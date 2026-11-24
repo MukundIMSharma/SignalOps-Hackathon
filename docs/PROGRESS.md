@@ -1,18 +1,18 @@
 # Progress
 
 **Last updated:** 2026-11-24
-**Current focus:** Milestone 2 — Synapse/MCP proof (blocked: Synapse CLI install command needed)
+**Current focus:** Milestone 2 — Synapse/MCP proof (blocked: Synapse API key)
 **Last completed:** Milestone 1 — both APIs built, seeded, 21/21 tests passing, run live on 8001/8002
-**Next up:** install Synapse, generate both MCP servers; GitHub remote; confirm LLM API key
+**Next up:** user sets Synapse key → `synapse init` in both APIs → build Auto MCP; user adds GEMINI_API_KEY to .env
 
 ## Milestone 0 — Setup / scope lock
-- [ ] Create GitHub repo(s) — local git done (branch main); remote pending
+- [x] Create GitHub repo(s) — origin pushed
 - [x] Create project directories
 - [x] Agree on API schemas (CONTRACTS.md, business APIs locked)
 - [ ] Create task board / issue list — using PROGRESS.md for now
 - [x] Set up environment and `.env.example` (`.env` itself not created)
-- [ ] Confirm model/API access
-- [ ] Confirm Synapse CLI works
+- [ ] Confirm model/API access — Gemini chosen; key + model id pending
+- [ ] Confirm Synapse CLI works — installed v0.1.9; build blocked on API key
 
 ## Milestone 1 — Two APIs + seed data
 - [x] Orders schema/routes
