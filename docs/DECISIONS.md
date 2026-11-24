@@ -22,3 +22,7 @@ Format: `date — decision — reason`
 - 2026-11-24 — Priority weights: VIP 30, SLA breached 25 + 5/day overdue (cap 3), open complaint 20, at-risk 10; order value not scored — plan §11 (transparent rules, don't penalise low-value customers); ties by dispatch date then order_id.
 - 2026-11-24 — Transfer allocation: greedy in priority order, skip orders that don't fit — keeps priority meaningful and still uses all 40 units (20 recovered).
 - 2026-11-24 — Backend unit tests run on a JSON snapshot of the seeded APIs (tests/fixtures) — fast/offline; MCP integration test covers the live path.
+- 2026-11-24 — Root cause reported as `likely`, never `confirmed` — every fact is confirmed at source, but causality is inferred and W1's physical stock is unknown (stale). Plan principle 5.
+- 2026-11-24 — Orchestrator takes an injected `call(server, tool, args)` — tests replay the snapshot and simulate outages without MCP; live uses `open_caller()`.
+- 2026-11-24 — Skipped LLM intent parsing / query planning — the workflow is fixed and answers questions A/B/C from one report; add only if a free-form follow-up is demoed.
+- 2026-11-24 — LLM_FALLBACK_MODEL=gemini-3.5-flash — 3.8-flash returned 503 repeatedly on free tier.

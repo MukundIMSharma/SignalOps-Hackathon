@@ -73,7 +73,7 @@ Generated tool names = operationIds (all except `health`):
 
 Tool result: one TextContent with the API's JSON body. API errors → `is_error=True`, body `{"error": {...}}`.
 
-## Evidence schema — DRAFT
+## Evidence schema — IMPLEMENTED (`agent/schemas.py`)
 ```json
 {
   "evidence_id": "E-001",
@@ -89,14 +89,30 @@ Tool result: one TextContent with the API's JSON body. API errors → `is_error=
 ```
 `status`: confirmed | likely | hypothesis | unknown
 
-## Finding schema — DRAFT
+## Finding schema — IMPLEMENTED
 finding_id, title, summary, severity, status (confirmed|likely|hypothesis|unknown), evidence_ids[], confidence_explanation (no pseudo-precise percentages), impact_metrics{}
 
 ## Investigation status — DRAFT
 queued | investigating | partial | awaiting_approval | completed | failed | cancelled
 
-## Approval payload — DRAFT
-action_id, action_type, description, inputs, affected_entities[], risk_level, evidence_ids[], expected_outcome, approval_status, approver_id, timestamp, idempotency_key, execution_result
+## Action (proposal) — IMPLEMENTED; approval fields added in Milestone 5
+action_id, action_type (inventory_transfer|prioritize_tickets|draft_customer_update|create_internal_incident|monitor_orders), description, inputs{}, affected_entities[], risk_level (high|medium|low), evidence_ids[], expected_outcome, requires_approval, approval_status (pending|approved|rejected|not_required)
+M5 adds: approver_id, timestamp, idempotency_key, execution_result
+
+## Investigation report — IMPLEMENTED (`Investigation.run()`)
+```
+{ request, status, as_of,
+  findings[Finding], evidence[Evidence],
+  impact{ metric: {value, definition} } | null,
+  priorities[{rank, order_id, customer_id, customer_name, tier, score, reasons[], has_open_complaint,
+              quantity, total_amount, sla_breached, recoverable_by_transfer}] | null,
+  transfer{recovered_order_ids[], unrecovered_order_ids[], units_allocated, units_unused} | null,
+  transfer_plan{product_id, source, destination, units, evidence_ids[]} | null,
+  actions[Action], gaps[str], trace[{seq, server, tool, args, ok, ms, summary}],
+  prioritization_weights{}, narrative{text, source: llm|template, model, error} }
+```
+Live events (`on_event`): `{type: stage, stage}`, `{type: tool_call, ...ToolEvent}`, `{type: evidence, evidence_id, claim, status}`.
+Finding statuses: root cause is `likely` at best (facts confirmed, causality inferred); `unknown` when a source system is down.
 
 ## SignalOps backend API (for frontend) — TBD
 Define before Milestone 4 frontend work starts.

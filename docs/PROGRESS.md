@@ -1,9 +1,9 @@
 # Progress
 
 **Last updated:** 2026-11-24
-**Current focus:** Milestone 3 — agent investigation
-**Last completed:** M3 deterministic core: correlation, impact, prioritization, transfer allocation (5 tests)
-**Next up:** Gemini latency fix; orchestrator (evidence, findings, partial results) + report
+**Current focus:** Milestone 4 — backend HTTP/SSE API, then frontend MVP
+**Last completed:** Milestone 3 — live terminal investigation over both MCP servers; 21/21 backend tests
+**Next up:** FastAPI backend (start investigation, SSE events, report, systems/tools); define its contract; then React app
 
 ## Milestone 0 — Setup / scope lock
 - [x] Create GitHub repo(s) — origin pushed
@@ -31,15 +31,15 @@
 - [x] Save configuration and instructions
 
 ## Milestone 3 — Agent investigation
-- [ ] Orchestrator and investigation state
-- [ ] Tool calling
+- [x] Orchestrator and investigation state
+- [x] Tool calling
 - [x] Cross-system correlation
-- [ ] Evidence collection
-- [ ] Root cause
+- [x] Evidence collection
+- [x] Root cause
 - [x] Impact calculations
 - [x] Customer prioritization
-- [ ] Report generation
-- [ ] Failure/partial result handling
+- [x] Report generation
+- [x] Failure/partial result handling
 
 ## Milestone 4 — Frontend MVP
 - [ ] App shell/navigation

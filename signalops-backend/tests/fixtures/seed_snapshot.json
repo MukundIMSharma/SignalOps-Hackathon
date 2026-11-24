@@ -848,5 +848,322 @@
    }
   ],
   "as_of": "2026-11-24T12:00:00"
- }
+ },
+ "shipments": [
+  {
+   "shipment_id": "S-2001",
+   "order_id": "O-1001",
+   "carrier": "SwiftParcel",
+   "status": "delivered",
+   "created_at": "2026-11-16T07:00:00",
+   "expected_delivery": "2026-11-18T07:00:00",
+   "actual_delivery": "2026-11-18T04:00:00",
+   "tracking_status": "Delivered"
+  },
+  {
+   "shipment_id": "S-2002",
+   "order_id": "O-1002",
+   "carrier": "SwiftParcel",
+   "status": "delivered",
+   "created_at": "2026-11-16T13:00:00",
+   "expected_delivery": "2026-11-18T13:00:00",
+   "actual_delivery": "2026-11-18T10:00:00",
+   "tracking_status": "Delivered"
+  },
+  {
+   "shipment_id": "S-2003",
+   "order_id": "O-1003",
+   "carrier": "SwiftParcel",
+   "status": "delivered",
+   "created_at": "2026-11-16T19:00:00",
+   "expected_delivery": "2026-11-18T19:00:00",
+   "actual_delivery": "2026-11-18T16:00:00",
+   "tracking_status": "Delivered"
+  },
+  {
+   "shipment_id": "S-2004",
+   "order_id": "O-1004",
+   "carrier": "SwiftParcel",
+   "status": "delivered",
+   "created_at": "2026-11-17T01:00:00",
+   "expected_delivery": "2026-11-19T01:00:00",
+   "actual_delivery": "2026-11-18T22:00:00",
+   "tracking_status": "Delivered"
+  },
+  {
+   "shipment_id": "S-2005",
+   "order_id": "O-1005",
+   "carrier": "SwiftParcel",
+   "status": "delivered",
+   "created_at": "2026-11-17T07:00:00",
+   "expected_delivery": "2026-11-19T07:00:00",
+   "actual_delivery": "2026-11-19T04:00:00",
+   "tracking_status": "Delivered"
+  },
+  {
+   "shipment_id": "S-2006",
+   "order_id": "O-1006",
+   "carrier": "SwiftParcel",
+   "status": "delivered",
+   "created_at": "2026-11-17T13:00:00",
+   "expected_delivery": "2026-11-19T13:00:00",
+   "actual_delivery": "2026-11-19T10:00:00",
+   "tracking_status": "Delivered"
+  },
+  {
+   "shipment_id": "S-2007",
+   "order_id": "O-1007",
+   "carrier": "SwiftParcel",
+   "status": "delivered",
+   "created_at": "2026-11-17T19:00:00",
+   "expected_delivery": "2026-11-19T19:00:00",
+   "actual_delivery": "2026-11-19T16:00:00",
+   "tracking_status": "Delivered"
+  },
+  {
+   "shipment_id": "S-2008",
+   "order_id": "O-1008",
+   "carrier": "SwiftParcel",
+   "status": "delivered",
+   "created_at": "2026-11-18T01:00:00",
+   "expected_delivery": "2026-11-20T01:00:00",
+   "actual_delivery": "2026-11-19T22:00:00",
+   "tracking_status": "Delivered"
+  },
+  {
+   "shipment_id": "S-2009",
+   "order_id": "O-1009",
+   "carrier": "SwiftParcel",
+   "status": "delivered",
+   "created_at": "2026-11-18T07:00:00",
+   "expected_delivery": "2026-11-20T07:00:00",
+   "actual_delivery": "2026-11-20T04:00:00",
+   "tracking_status": "Delivered"
+  },
+  {
+   "shipment_id": "S-2010",
+   "order_id": "O-1010",
+   "carrier": "SwiftParcel",
+   "status": "delivered",
+   "created_at": "2026-11-18T13:00:00",
+   "expected_delivery": "2026-11-20T13:00:00",
+   "actual_delivery": "2026-11-20T10:00:00",
+   "tracking_status": "Delivered"
+  },
+  {
+   "shipment_id": "S-2011",
+   "order_id": "O-1011",
+   "carrier": "SwiftParcel",
+   "status": "delivered",
+   "created_at": "2026-11-18T19:00:00",
+   "expected_delivery": "2026-11-20T19:00:00",
+   "actual_delivery": "2026-11-20T16:00:00",
+   "tracking_status": "Delivered"
+  },
+  {
+   "shipment_id": "S-2012",
+   "order_id": "O-1012",
+   "carrier": "SwiftParcel",
+   "status": "delivered",
+   "created_at": "2026-11-19T01:00:00",
+   "expected_delivery": "2026-11-21T01:00:00",
+   "actual_delivery": "2026-11-20T22:00:00",
+   "tracking_status": "Delivered"
+  },
+  {
+   "shipment_id": "S-2013",
+   "order_id": "O-1013",
+   "carrier": "SwiftParcel",
+   "status": "delivered",
+   "created_at": "2026-11-19T07:00:00",
+   "expected_delivery": "2026-11-21T07:00:00",
+   "actual_delivery": "2026-11-21T04:00:00",
+   "tracking_status": "Delivered"
+  },
+  {
+   "shipment_id": "S-2014",
+   "order_id": "O-1014",
+   "carrier": "SwiftParcel",
+   "status": "delivered",
+   "created_at": "2026-11-19T13:00:00",
+   "expected_delivery": "2026-11-21T13:00:00",
+   "actual_delivery": "2026-11-21T10:00:00",
+   "tracking_status": "Delivered"
+  },
+  {
+   "shipment_id": "S-2015",
+   "order_id": "O-1015",
+   "carrier": "SwiftParcel",
+   "status": "delivered",
+   "created_at": "2026-11-19T19:00:00",
+   "expected_delivery": "2026-11-21T19:00:00",
+   "actual_delivery": "2026-11-21T16:00:00",
+   "tracking_status": "Delivered"
+  },
+  {
+   "shipment_id": "S-2016",
+   "order_id": "O-1016",
+   "carrier": "SwiftParcel",
+   "status": "delivered",
+   "created_at": "2026-11-20T01:00:00",
+   "expected_delivery": "2026-11-22T01:00:00",
+   "actual_delivery": "2026-11-21T22:00:00",
+   "tracking_status": "Delivered"
+  },
+  {
+   "shipment_id": "S-2017",
+   "order_id": "O-1017",
+   "carrier": "SwiftParcel",
+   "status": "delivered",
+   "created_at": "2026-11-20T07:00:00",
+   "expected_delivery": "2026-11-22T07:00:00",
+   "actual_delivery": "2026-11-22T04:00:00",
+   "tracking_status": "Delivered"
+  },
+  {
+   "shipment_id": "S-2018",
+   "order_id": "O-1018",
+   "carrier": "SwiftParcel",
+   "status": "delivered",
+   "created_at": "2026-11-20T13:00:00",
+   "expected_delivery": "2026-11-22T13:00:00",
+   "actual_delivery": "2026-11-22T10:00:00",
+   "tracking_status": "Delivered"
+  },
+  {
+   "shipment_id": "S-2019",
+   "order_id": "O-1019",
+   "carrier": "SwiftParcel",
+   "status": "delivered",
+   "created_at": "2026-11-20T19:00:00",
+   "expected_delivery": "2026-11-22T19:00:00",
+   "actual_delivery": "2026-11-22T16:00:00",
+   "tracking_status": "Delivered"
+  },
+  {
+   "shipment_id": "S-2020",
+   "order_id": "O-1020",
+   "carrier": "SwiftParcel",
+   "status": "delivered",
+   "created_at": "2026-11-21T01:00:00",
+   "expected_delivery": "2026-11-23T01:00:00",
+   "actual_delivery": "2026-11-22T22:00:00",
+   "tracking_status": "Delivered"
+  },
+  {
+   "shipment_id": "S-2021",
+   "order_id": "O-1021",
+   "carrier": "SwiftParcel",
+   "status": "in_transit",
+   "created_at": "2026-11-21T07:00:00",
+   "expected_delivery": "2026-11-25T07:00:00",
+   "actual_delivery": null,
+   "tracking_status": "In transit"
+  },
+  {
+   "shipment_id": "S-2022",
+   "order_id": "O-1022",
+   "carrier": "SwiftParcel",
+   "status": "in_transit",
+   "created_at": "2026-11-21T13:00:00",
+   "expected_delivery": "2026-11-25T13:00:00",
+   "actual_delivery": null,
+   "tracking_status": "In transit"
+  },
+  {
+   "shipment_id": "S-2023",
+   "order_id": "O-1023",
+   "carrier": "SwiftParcel",
+   "status": "in_transit",
+   "created_at": "2026-11-21T19:00:00",
+   "expected_delivery": "2026-11-25T19:00:00",
+   "actual_delivery": null,
+   "tracking_status": "In transit"
+  },
+  {
+   "shipment_id": "S-2024",
+   "order_id": "O-1024",
+   "carrier": "SwiftParcel",
+   "status": "in_transit",
+   "created_at": "2026-11-22T01:00:00",
+   "expected_delivery": "2026-11-26T01:00:00",
+   "actual_delivery": null,
+   "tracking_status": "In transit"
+  },
+  {
+   "shipment_id": "S-2025",
+   "order_id": "O-1025",
+   "carrier": "SwiftParcel",
+   "status": "in_transit",
+   "created_at": "2026-11-22T07:00:00",
+   "expected_delivery": "2026-11-26T07:00:00",
+   "actual_delivery": null,
+   "tracking_status": "In transit"
+  },
+  {
+   "shipment_id": "S-2026",
+   "order_id": "O-1026",
+   "carrier": "NorthLine Freight",
+   "status": "exception",
+   "created_at": "2026-11-22T08:00:00",
+   "expected_delivery": "2026-11-24T00:00:00",
+   "actual_delivery": null,
+   "tracking_status": "Carrier exception: sorting facility backlog"
+  },
+  {
+   "shipment_id": "S-2027",
+   "order_id": "O-1027",
+   "carrier": "NorthLine Freight",
+   "status": "exception",
+   "created_at": "2026-11-22T12:00:00",
+   "expected_delivery": "2026-11-24T04:00:00",
+   "actual_delivery": null,
+   "tracking_status": "Carrier exception: sorting facility backlog"
+  },
+  {
+   "shipment_id": "S-2028",
+   "order_id": "O-1028",
+   "carrier": "SwiftParcel",
+   "status": "in_transit",
+   "created_at": "2026-11-22T13:00:00",
+   "expected_delivery": "2026-11-26T13:00:00",
+   "actual_delivery": null,
+   "tracking_status": "In transit"
+  },
+  {
+   "shipment_id": "S-2029",
+   "order_id": "O-1029",
+   "carrier": "SwiftParcel",
+   "status": "in_transit",
+   "created_at": "2026-11-22T19:00:00",
+   "expected_delivery": "2026-11-26T19:00:00",
+   "actual_delivery": null,
+   "tracking_status": "In transit"
+  },
+  {
+   "shipment_id": "S-2030",
+   "order_id": "O-1030",
+   "carrier": "SwiftParcel",
+   "status": "in_transit",
+   "created_at": "2026-11-23T01:00:00",
+   "expected_delivery": "2026-11-27T01:00:00",
+   "actual_delivery": null,
+   "tracking_status": "In transit"
+  }
+ ],
+ "warehouses": [
+  {
+   "warehouse_id": "W1",
+   "name": "Northgate Fulfillment Center",
+   "location": "Northgate (fictional)",
+   "status": "degraded"
+  },
+  {
+   "warehouse_id": "W2",
+   "name": "Riverside Distribution Hub",
+   "location": "Riverside (fictional)",
+   "status": "operational"
+  }
+ ],
+ "as_of": "2026-11-24T12:00:00"
 }

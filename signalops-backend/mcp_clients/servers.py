@@ -30,3 +30,32 @@ async def connect(name: str):
         async with ClientSession(read, write) as session:
             await session.initialize()
             yield session
+
+
+@asynccontextmanager
+async def open_caller():
+    """Keep one MCP session per server open; yield call(server, tool, args) -> parsed JSON (ToolError on failure)."""
+    import json
+    from contextlib import AsyncExitStack
+
+    from agent.orchestrator import ToolError
+
+    async with AsyncExitStack() as stack:
+        sessions = {}
+        for name in SERVERS:
+            try:
+                sessions[name] = await stack.enter_async_context(connect(name))
+            except Exception as e:  # a server that won't start becomes a per-call ToolError -> partial report
+                sessions[name] = e
+
+        async def call(server: str, tool: str, args: dict):
+            s = sessions[server]
+            if isinstance(s, Exception):
+                raise ToolError(f"{server} MCP server not connected: {s}")
+            r = await s.call_tool(tool, args)
+            body = json.loads(r.content[0].text) if r.content else None
+            if r.is_error:
+                raise ToolError(f"{tool}: {body}")
+            return body
+
+        yield call

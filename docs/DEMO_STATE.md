@@ -52,7 +52,11 @@ cd nova-inventory && .venv/Scripts/python -m app.seed
 cd nova-orders && .venv/Scripts/python -m uvicorn app.main:app --port 8001
 cd nova-inventory && .venv/Scripts/python -m uvicorn app.main:app --port 8002
 ```
-TBD: MCP servers, backend, frontend, `synapse build --discover`.
+```bash
+# terminal investigation through both Synapse MCP servers (verified 2026-11-24)
+cd signalops-backend && .venv/Scripts/python investigate.py
+```
+TBD: backend server, frontend, live `synapse build --discover`.
 
 ## Rehearsals
 | # | Date | Steps passed | Notes |
