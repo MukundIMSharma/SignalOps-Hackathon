@@ -77,6 +77,7 @@ export interface Report {
   gaps: string[]
   trace: ToolEvent[]
   prioritization_weights: Record<string, number>
+  timeline: { at: string; event: string; source_system: string }[]
   narrative: { text: string | null; source: 'llm' | 'template' | 'pending'; model: string | null; error: string | null }
 }
 

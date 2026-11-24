@@ -37,6 +37,7 @@ class Investigation:
         self.evidence: list[Evidence] = []
         self.gaps: list[str] = []
         self.as_of = ""
+        self.timeline: list[dict] = []  # {at, event, source_system}
 
     # ---- tool access -------------------------------------------------------------------------
     async def tool(self, server: str, tool: str, args: dict | None = None) -> Any:
@@ -138,6 +139,15 @@ class Investigation:
                 "get_inventory_sync_status", [sync["sync_id"], wh, *sync["affected_products"]],
                 {k: sync[k] for k in ("status", "last_success", "failing_since", "error_code", "error_message",
                                       "severity")})
+            breached = sorted(o["expected_dispatch_date"] for o in linked if o["sla_breached"])
+            self.timeline += [
+                {"at": sync["last_success"], "event": f"Last successful {sync['source']} sync", "source_system": "inventory"},
+                {"at": sync["failing_since"], "event": f"{sync['source']} sync starts failing ({sync['error_code']})",
+                 "source_system": "inventory"},
+                {"at": min(o["expected_dispatch_date"] for o in linked),
+                 "event": "First affected order due for dispatch (allocation fails)", "source_system": "orders"},
+            ] + ([{"at": breached[-1], "event": f"Latest dispatch-date breach so far ({len(breached)} breached)",
+                   "source_system": "orders"}] if breached else [])
             timing_ok = dispatch_after_failure(linked, sync["failing_since"])
             e_timing = self.add_evidence(
                 f"All {len(linked)} linked orders were due for dispatch after the sync began failing" if timing_ok
@@ -229,6 +239,10 @@ class Investigation:
                 self.gaps.append(str(e))
         known = [o for o in incident_orders if o["customer_id"] in customers]
         tickets = tickets or []
+        delay_tix = sorted(t["created_at"] for t in tickets if t["customer_id"] in customers and t["category"] == "delivery_delay")
+        if delay_tix:
+            self.timeline.append({"at": delay_tix[0], "event": f"First customer delay complaint ({len(delay_tix)} so far)",
+                                  "source_system": "orders"})
         ranked = rank_orders(known, customers, tickets)
 
         transfer_plan = self._plan_transfer(incident_orders, stock_by_product, ranked)
@@ -355,6 +369,9 @@ class Investigation:
             "gaps": self.gaps,
             "trace": [t.model_dump() for t in self.trace],
             "prioritization_weights": WEIGHTS,
+            "timeline": sorted(self.timeline + ([{"at": self.as_of, "event": "Investigation data snapshot (as_of)",
+                                                  "source_system": "signalops"}] if self.as_of else []),
+                               key=lambda e: e["at"]),
         }
 
 

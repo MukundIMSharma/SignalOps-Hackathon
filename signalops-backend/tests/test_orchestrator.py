@@ -122,3 +122,11 @@ def test_uses_incidents_tool_only_when_discovered():
     ev = {e["evidence_id"]: e for e in r["evidence"]}
     assert any(ev[i]["source_tool"] == "get_inventory_incidents" for i in root["evidence_ids"])
     assert root["status"] == "likely" and r["gaps"] == []
+
+
+def test_timeline_ordered_and_sourced():
+    t = run(fake_call())["timeline"]
+    assert [e["at"] for e in t] == sorted(e["at"] for e in t)
+    events = " | ".join(e["event"] for e in t)
+    assert "Last successful W1-WMS sync" in events and "starts failing" in events and "First customer delay complaint" in events
+    assert t[0]["at"] == "2026-11-23T09:41:00" and t[-1]["at"] == "2026-11-24T12:00:00"

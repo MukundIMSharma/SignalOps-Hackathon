@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { startInvestigation, useFetch, useInvestigation } from '../api'
-import { ActionsList, Activity, CrossSystemAnswers, EvidenceList, Findings, Gaps, Impact, Narrative, Priorities } from '../components/report'
+import { Timeline, ActionsList, Activity, CrossSystemAnswers, EvidenceList, Findings, Gaps, Impact, Narrative, Priorities } from '../components/report'
 import { Card, ErrorNote, InvBadge, Mono, time } from '../components/ui'
 import type { InvestigationSummary } from '../types'
 
@@ -87,6 +87,7 @@ function Workspace({ id, onStatus }: { id: string; onStatus: () => void }) {
             <Gaps gaps={r.gaps} />
             <Narrative n={r.narrative} />
             <Findings r={r} />
+            <Timeline r={r} />
             <Impact r={r} />
             <CrossSystemAnswers r={r} />
             <Priorities r={r} limit={10} />

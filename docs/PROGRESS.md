@@ -67,11 +67,11 @@
 - [x] UI shows updated tools (rehearsed; repeat live at demo)
 
 ## Milestone 7 — Polish, testing, submission
-- [ ] Run full test suite
-- [ ] Run 5 demo rehearsals
-- [ ] Fix P0 bugs
-- [ ] Prepare README
-- [ ] Prepare architecture image
-- [ ] Record backup video
-- [ ] Prepare pitch
-- [ ] Check repository and secrets
+- [x] Run full test suite (12 + 9 + 37 = 58 passed, frontend build clean)
+- [x] Run 5 demo rehearsals — automated (`scripts/rehearse.py 5`: 0 failed checks); presenter run-throughs still to do
+- [x] Fix P0 bugs (none open)
+- [x] Prepare README
+- [x] Prepare architecture image (Mermaid in README + docs/architecture.md)
+- [ ] Record backup video (human)
+- [ ] Prepare pitch (human)
+- [x] Check repository and secrets (files + full history: 0 key matches)

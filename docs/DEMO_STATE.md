@@ -44,6 +44,11 @@ Cross-system questions:
 - C (optional): Prioritize the delayed orders based on SLA breach, customer tier, and complaints. Explain why each customer is prioritized.
 
 ## Commands
+```powershell
+powershell -File scripts\start-demo.ps1 -Reset   # reseed + start all 4 + wait for health
+python scriptsehearse.py 5                     # automated end-to-end check
+```
+Manual equivalents:
 ```bash
 # reseed (deterministic)
 cd nova-orders && .venv/Scripts/python -m app.seed
@@ -66,3 +71,4 @@ Live discovery step: follow `docs/live-endpoint.md` exactly (paste-ready code + 
 | # | Date | Steps passed | Notes |
 |---|---|---|---|
 | 1 | 2026-11-24 | M6 discovery only: endpoint added from docs/live-endpoint.md → restart → `synapse build --discover` (3.7s, same server_id) → Systems shows ★ newly discovered (8→9 tools) → investigation shows ★ New capability + evidence INV-2026-042 → reset to 8 tools | passed; screenshots in docs/demo-backup/ |
+| 2 | 2026-11-24 | `scripts/rehearse.py 5` on a fresh stack: 5 investigations (3.0–4.3s, 30 MCP calls each), all 12 impact numbers + root cause + cross-system evidence identical every run; approve → executed, duplicate → 409, audit complete, tool counts 9/8 | passed (0 failed checks) |

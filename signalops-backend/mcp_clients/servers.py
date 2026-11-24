@@ -10,9 +10,9 @@ from mcp.client.stdio import stdio_client
 load_dotenv(os.path.join(os.path.dirname(__file__), "..", "..", ".env"))
 
 SERVERS = {
-    "orders": {"server_id": "6ab65632-0790-4e06-8b0e-77bb3d448920",
+    "orders": {"server_id": os.getenv("ORDERS_MCP_SERVER_ID", "6ab65632-0790-4e06-8b0e-77bb3d448920"),
                "base_url": os.getenv("ORDERS_API_URL", "http://localhost:8001"), "repo": "nova-orders"},
-    "inventory": {"server_id": "bf451b7a-95c9-4658-b2a6-91708fb7ef84",
+    "inventory": {"server_id": os.getenv("INVENTORY_MCP_SERVER_ID", "bf451b7a-95c9-4658-b2a6-91708fb7ef84"),
                   "base_url": os.getenv("INVENTORY_API_URL", "http://localhost:8002"), "repo": "nova-inventory"},
 }
 

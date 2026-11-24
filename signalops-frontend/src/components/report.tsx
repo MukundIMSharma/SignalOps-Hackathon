@@ -253,3 +253,23 @@ function ActionStatus({ a }: { a: Action }) {
   if (a.approval_status === 'pending') return <Badge t="amber" icon="⏸">pending approval</Badge>
   return <Badge t="zinc" icon="–">{a.approval_status === 'not_required' ? 'no approval needed' : a.approval_status}</Badge>
 }
+
+export function Timeline({ r }: { r: Report }) {
+  if (!r.timeline?.length) return null
+  return (
+    <Card title="Incident timeline">
+      <ol className="relative ml-2 border-l border-zinc-700">
+        {r.timeline.map((e, i) => (
+          <li key={i} className="mb-3 ml-4 last:mb-0">
+            <span className="absolute -left-[5px] mt-1.5 h-2.5 w-2.5 rounded-full bg-indigo-400" aria-hidden />
+            <div className="flex flex-wrap items-center gap-2 text-sm">
+              <span className="font-mono text-xs text-zinc-400">{e.at.replace('T', ' ').slice(0, 16)}</span>
+              {e.source_system === 'signalops' ? <Badge>SignalOps</Badge> : <ServerBadge s={e.source_system} />}
+              <span className="text-zinc-200">{e.event}</span>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </Card>
+  )
+}

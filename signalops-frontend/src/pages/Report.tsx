@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { useInvestigation } from '../api'
-import { ActionsList, EvidenceList, Findings, Gaps, Impact, Narrative, Priorities } from '../components/report'
+import { Timeline, ActionsList, EvidenceList, Findings, Gaps, Impact, Narrative, Priorities } from '../components/report'
 import { Card, ErrorNote, InvBadge, Mono, ServerBadge, time } from '../components/ui'
 
 /** Printable incident report (plan §13). Browser print → PDF. */
@@ -23,6 +23,7 @@ export default function ReportPage() {
       <Gaps gaps={r.gaps} />
       <Narrative n={r.narrative} />
       <Findings r={r} />
+      <Timeline r={r} />
       <Card title="Missing or uncertain information">
         {unknowns.length === 0 && r.gaps.length === 0 ? <p className="text-sm text-zinc-400">None recorded.</p> : (
           <ul className="list-disc space-y-1 pl-5 text-sm text-zinc-300">
