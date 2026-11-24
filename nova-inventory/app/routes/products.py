@@ -10,8 +10,9 @@ router = APIRouter(tags=["products"])
 
 
 @router.get("/products", response_model=Page[ProductOut], summary="Product catalog")
-def list_products(category: str | None = None, limit: int = Query(50, ge=1, le=200),
+def list_products(category: str | None = None, limit: int = Query(200, ge=1, le=200),
                   offset: int = Query(0, ge=0), db: Session = Depends(get_db)):
+    """Product catalog."""
     stmt = select(Product)
     if category:
         stmt = stmt.where(Product.category == category)
@@ -22,6 +23,7 @@ def list_products(category: str | None = None, limit: int = Query(50, ge=1, le=2
 
 @router.get("/products/{product_id}", response_model=ProductOut, summary="Product details")
 def get_product_details(product_id: str, db: Session = Depends(get_db)):
+    """Product details."""
     product = db.get(Product, product_id)
     if not product:
         raise HTTPException(404, f"Product {product_id} not found")

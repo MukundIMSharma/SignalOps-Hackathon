@@ -11,6 +11,7 @@ router = APIRouter(tags=["analytics"])
 
 @router.get("/analytics/stock-health", response_model=StockHealth, summary="Stock and sync health summary")
 def get_stock_health(db: Session = Depends(get_db)):
+    """Stock and sync health summary."""
     thresholds = dict(db.execute(select(Product.product_id, Product.reorder_threshold)).all())
     stock = db.scalars(select(Stock)).all()
     warehouses = db.scalars(select(Warehouse)).all()

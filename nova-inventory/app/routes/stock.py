@@ -11,8 +11,9 @@ router = APIRouter(tags=["stock"])
 
 @router.get("/stock", response_model=Page[StockOut], summary="Stock positions; filter by product or warehouse")
 def get_warehouse_inventory(product_id: str | None = None, warehouse_id: str | None = None,
-                            limit: int = Query(100, ge=1, le=200), offset: int = Query(0, ge=0),
+                            limit: int = Query(200, ge=1, le=200), offset: int = Query(0, ge=0),
                             db: Session = Depends(get_db)):
+    """Stock positions; filter by product or warehouse."""
     stmt = select(Stock)
     if product_id:
         stmt = stmt.where(Stock.product_id == product_id)
@@ -26,6 +27,7 @@ def get_warehouse_inventory(product_id: str | None = None, warehouse_id: str | N
 @router.get("/stock/low", response_model=Page[LowStockOut],
             summary="Stock positions with available quantity below the product's reorder threshold")
 def get_low_stock_products(warehouse_id: str | None = None, db: Session = Depends(get_db)):
+    """Stock positions with available quantity below the product's reorder threshold."""
     stmt = (select(Stock, Product.reorder_threshold).join(Product)
             .where(Stock.available_quantity < Product.reorder_threshold))
     if warehouse_id:
@@ -38,6 +40,7 @@ def get_low_stock_products(warehouse_id: str | None = None, db: Session = Depend
 
 @router.get("/stock/{product_id}", response_model=ProductStockOut, summary="Stock for one product across all warehouses")
 def get_product_stock(product_id: str, db: Session = Depends(get_db)):
+    """Stock for one product across all warehouses."""
     product = db.get(Product, product_id)
     if not product:
         raise HTTPException(404, f"Product {product_id} not found")

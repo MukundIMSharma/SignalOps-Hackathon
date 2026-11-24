@@ -59,12 +59,19 @@ Reserved for Milestone 6 live demo — **not implemented, a test asserts it is a
   "description": "Inventory synchronization failed; availability may be stale." }
 ```
 
-## MCP servers — BUILT (Milestone 2), tool calls not yet verified
-| Server | server_id | Base URL | Exposed tools |
-|---|---|---|---|
-| nova-orders | 6ab65632-0790-4e06-8b0e-77bb3d448920 | http://localhost:8001 | all Orders operationIds except `health` |
-| nova-inventory | bf451b7a-95c9-4658-b2a6-91708fb7ef84 | http://localhost:8002 | all Inventory operationIds except `health` |
-Confirm exact generated tool names from `list_tools` and record them here.
+## MCP servers — VERIFIED (Milestone 2, `signalops-backend/tests/test_mcp_tools.py`)
+| Server | server_id | Base URL |
+|---|---|---|
+| nova-orders | 6ab65632-0790-4e06-8b0e-77bb3d448920 | http://localhost:8001 |
+| nova-inventory | bf451b7a-95c9-4658-b2a6-91708fb7ef84 | http://localhost:8002 |
+
+Generated tool names = operationIds (all except `health`):
+- **orders (9):** get_delayed_orders, get_at_risk_orders, list_orders, get_order_details(order_id), get_customer_details(customer_id), get_customer_orders(customer_id), get_shipment_status, get_support_tickets, get_order_health
+- **inventory (8):** list_products, get_product_details(product_id), get_warehouse_inventory, get_low_stock_products, get_product_stock(product_id), get_warehouse_status, get_inventory_sync_status, get_stock_health
+
+**Tool inputs = path params only.** Synapse v0.1.9 Auto does not expose query params, so filters/pagination are unavailable via MCP. List endpoints default to limit=200 so one call returns the full list; the agent filters in code and must check `total == len(items)` (else mark data partial).
+
+Tool result: one TextContent with the API's JSON body. API errors → `is_error=True`, body `{"error": {...}}`.
 
 ## Evidence schema — DRAFT
 ```json

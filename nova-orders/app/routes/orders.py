@@ -26,10 +26,11 @@ def list_orders(
     customer_id: str | None = None,
     order_date_from: datetime | None = None,
     order_date_to: datetime | None = None,
-    limit: int = Query(50, ge=1, le=200),
+    limit: int = Query(200, ge=1, le=200),
     offset: int = Query(0, ge=0),
     db: Session = Depends(get_db),
 ):
+    """List orders with filters and pagination."""
     stmt = select(Order)
     for col, val in ((Order.status, status), (Order.priority, priority), (Order.product_id, product_id),
                      (Order.warehouse_id, warehouse_id), (Order.customer_id, customer_id)):
@@ -47,10 +48,11 @@ def get_delayed_orders(
     product_id: str | None = None,
     warehouse_id: str | None = None,
     delay_reason: str | None = Query(None, description="stock_allocation_failed | carrier_exception"),
-    limit: int = Query(100, ge=1, le=200),
+    limit: int = Query(200, ge=1, le=200),
     offset: int = Query(0, ge=0),
     db: Session = Depends(get_db),
 ):
+    """Delayed orders (any cause)."""
     stmt = select(Order).where(Order.status == "delayed")
     for col, val in ((Order.product_id, product_id), (Order.warehouse_id, warehouse_id),
                      (Order.delay_reason, delay_reason)):
@@ -61,8 +63,9 @@ def get_delayed_orders(
 
 @router.get("/orders/at-risk", response_model=Page[OrderOut],
             summary="Delayed, undispatched orders whose dispatch date has not passed yet (will breach SLA if not unblocked)")
-def get_at_risk_orders(limit: int = Query(100, ge=1, le=200), offset: int = Query(0, ge=0),
+def get_at_risk_orders(limit: int = Query(200, ge=1, le=200), offset: int = Query(0, ge=0),
                    db: Session = Depends(get_db)):
+    """Delayed, undispatched orders whose dispatch date has not passed yet (will breach SLA if not unblocked)."""
     stmt = select(Order).where(
         Order.status == "delayed", Order.shipment_id.is_(None), Order.expected_dispatch_date >= AS_OF
     )
@@ -71,6 +74,7 @@ def get_at_risk_orders(limit: int = Query(100, ge=1, le=200), offset: int = Quer
 
 @router.get("/orders/{order_id}", response_model=OrderOut, summary="Order detail")
 def get_order_details(order_id: str, db: Session = Depends(get_db)):
+    """Order detail."""
     order = db.get(Order, order_id)
     if not order:
         raise HTTPException(404, f"Order {order_id} not found")

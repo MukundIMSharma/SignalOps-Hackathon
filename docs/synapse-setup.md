@@ -36,3 +36,13 @@ Gotchas:
 - `--endpoints` accepts tool names = FastAPI operationIds (we set operationId = function name). `/health` deliberately not exposed.
 - Generated MCP runs **locally** over stdio: `npx -y @2ndbrainlabs-ai/synapse-mcp` with env `SYNAPSE_SERVER_ID`, `SYNAPSE_API_KEY`, `ENDPOINT_BASE_URL`. So localhost APIs work; the runner refuses to start without `SYNAPSE_API_KEY` in env.
 - `.synapse/` besides `config.json` (discover logs, surface_cache) has no secrets and is committed.
+- Tool descriptions come from handler **docstrings**, not FastAPI `summary=`.
+- **No query params in tool schemas** (path params only), even with `--smart-names`. See KNOWN_ISSUES.
+- Rebuild after code changes: same `--server-name` + `--discover` keeps the same server_id (verified).
+
+Verify both servers (APIs running, SYNAPSE_API_KEY in .env):
+```bash
+cd signalops-backend
+.venv/Scripts/python list_tools.py
+.venv/Scripts/python -m pytest -q tests/test_mcp_tools.py   # 3 passed
+```

@@ -17,3 +17,5 @@ Format: `date — decision — reason`
 - 2026-11-24 — Full paths in route decorators, no router prefixes — Synapse v0.1.9 scanner ignores prefixes (would generate tools hitting wrong paths).
 - 2026-11-24 — Backend MCP client package is `signalops-backend/mcp_clients/`, not `mcp/` as in plan §6 — a local `mcp` package would shadow the `mcp` SDK.
 - 2026-11-24 — `/health` not exposed as MCP tool — health checks use direct HTTP per plan §5.
+- 2026-11-24 — Agent filters full lists in code instead of passing filters to tools — Synapse v0.1.9 Auto passes path params only; filtering in code is deterministic anyway (plan §10).
+- 2026-11-24 — Route docstrings = summaries — Synapse reads docstrings (not `summary=`) for tool descriptions.

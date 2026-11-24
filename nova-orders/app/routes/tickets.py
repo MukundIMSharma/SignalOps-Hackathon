@@ -15,10 +15,11 @@ def get_support_tickets(
     order_id: str | None = None,
     category: str | None = Query(None, description="delivery_delay | billing | product_question"),
     status: str | None = Query(None, description="open | closed"),
-    limit: int = Query(50, ge=1, le=200),
+    limit: int = Query(200, ge=1, le=200),
     offset: int = Query(0, ge=0),
     db: Session = Depends(get_db),
 ):
+    """Support tickets; filter by customer, order, category, status."""
     stmt = select(SupportTicket)
     for col, val in ((SupportTicket.customer_id, customer_id), (SupportTicket.order_id, order_id),
                      (SupportTicket.category, category), (SupportTicket.status, status)):

@@ -14,10 +14,11 @@ def get_shipment_status(
     order_id: str | None = None,
     status: str | None = Query(None, description="in_transit | delivered | exception"),
     carrier: str | None = None,
-    limit: int = Query(50, ge=1, le=200),
+    limit: int = Query(200, ge=1, le=200),
     offset: int = Query(0, ge=0),
     db: Session = Depends(get_db),
 ):
+    """List shipments; filter by order, status or carrier."""
     stmt = select(Shipment)
     for col, val in ((Shipment.order_id, order_id), (Shipment.status, status), (Shipment.carrier, carrier)):
         if val is not None:

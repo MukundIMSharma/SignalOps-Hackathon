@@ -13,6 +13,7 @@ router = APIRouter(tags=["sync"])
             summary="Inventory synchronization status per warehouse source, including errors and affected SKUs")
 def get_inventory_sync_status(status: str | None = Query(None, description="success | failed"),
                               warehouse_id: str | None = None, db: Session = Depends(get_db)):
+    """Inventory synchronization status per warehouse source, including errors and affected SKUs."""
     stmt = select(SyncStatus)
     if status:
         stmt = stmt.where(SyncStatus.status == status)

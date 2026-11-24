@@ -19,11 +19,13 @@ def require_customer(db: Session, customer_id: str) -> Customer:
 
 @router.get("/customers/{customer_id}", response_model=CustomerOut, summary="Customer details")
 def get_customer_details(customer_id: str, db: Session = Depends(get_db)):
+    """Customer details."""
     return require_customer(db, customer_id)
 
 
 @router.get("/customers/{customer_id}/orders", response_model=Page[OrderOut], summary="Customer order history")
-def get_customer_orders(customer_id: str, limit: int = Query(50, ge=1, le=200), offset: int = Query(0, ge=0),
+def get_customer_orders(customer_id: str, limit: int = Query(200, ge=1, le=200), offset: int = Query(0, ge=0),
                     db: Session = Depends(get_db)):
+    """Customer order history."""
     require_customer(db, customer_id)
     return paged(db, select(Order).where(Order.customer_id == customer_id), limit, offset)

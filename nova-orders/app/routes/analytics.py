@@ -11,6 +11,7 @@ router = APIRouter(tags=["analytics"])
 
 @router.get("/analytics/order-health", response_model=OrderHealth, summary="Order health summary at the demo clock")
 def get_order_health(db: Session = Depends(get_db)):
+    """Order health summary at the demo clock."""
     orders = [OrderOut.model_validate(o) for o in db.scalars(select(Order))]
     tickets = db.scalars(select(SupportTicket).where(SupportTicket.status == "open")).all()
     delayed = [o for o in orders if o.status == "delayed"]

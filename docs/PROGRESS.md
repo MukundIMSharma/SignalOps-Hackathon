@@ -1,9 +1,9 @@
 # Progress
 
 **Last updated:** 2026-11-24
-**Current focus:** Milestone 2 — test client calling both MCP servers (blocked: SYNAPSE_API_KEY in .env)
-**Last completed:** Both Synapse Auto MCP servers built (orders, inventory)
-**Next up:** list + call every tool on both servers, record names in CONTRACTS.md
+**Current focus:** Milestone 3 — agent investigation
+**Last completed:** Milestone 2 — all 17 MCP tools called through Synapse and verified (3/3 integration tests)
+**Next up:** confirm Gemini model id; deterministic impact/prioritization/allocation + tests; then orchestrator
 
 ## Milestone 0 — Setup / scope lock
 - [x] Create GitHub repo(s) — origin pushed
@@ -26,9 +26,9 @@
 - [x] Generate Orders MCP
 - [x] Generate Inventory MCP
 - [x] Select endpoints
-- [ ] Connect both to test client
-- [ ] Test representative tools
-- [ ] Save configuration and instructions
+- [x] Connect both to test client
+- [x] Test representative tools
+- [x] Save configuration and instructions
 
 ## Milestone 3 — Agent investigation
 - [ ] Orchestrator and investigation state
