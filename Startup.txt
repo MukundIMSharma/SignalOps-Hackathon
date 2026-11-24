@@ -1,0 +1,30 @@
+You need a small set of plain markdown files in the repo. Claude Code reads CLAUDE.md every session, and that file tells it to read and update the others.
+
+text
+signalops/
+├── CLAUDE.md                 # rules + pointers, read every session
+└── docs/
+    ├── MASTER_PLAN.md        # your SignalOps_Hackathon_Master_Plan.md (copy it here)
+    ├── PROGRESS.md           # milestone checklist + current status
+    ├── CONTRACTS.md          # API schemas, MCP tool names, evidence/finding schemas
+    ├── DECISIONS.md          # choices made and why
+    ├── KNOWN_ISSUES.md       # bugs, blockers, workarounds
+    ├── DEMO_STATE.md         # seed counts, demo prompt, commands, what's verified live
+    └── synapse-setup.md      # exact Synapse commands/flags that worked
+
+Your plan already lists architecture.md, demo-script.md, judging-checklist.md and synapse-setup.md under docs/. Create those later, when there is something real to write.
+
+What each file holds
+
+CLAUDE.md: the section 14 shared AI instructions, the task template, the stack, and the repo layout. Add rules like these:
+Read docs/PROGRESS.md and docs/CONTRACTS.md before starting.
+After each task, update PROGRESS.md.
+Record any schema or tool change in CONTRACTS.md.
+Never mark something done without running its tests.
+PROGRESS.md: Milestones 0 to 7 as checkboxes, plus "Current focus", "Last completed", "Next up", and the date of each update.
+CONTRACTS.md: endpoints for Orders and Inventory, generated MCP tool names, and the evidence and finding schemas. This is the file that keeps the backend and frontend in sync.
+DECISIONS.md: one line each, in the form date, decision, reason.
+KNOWN_ISSUES.md: open problems with the exact error text and what you tried.
+DEMO_STATE.md: the deterministic counts (28 delayed, 9 tickets, and so on), the exact demo prompt, and which steps you've rehearsed.
+
+with the Superpowers plugin, Claude also writes plans under docs/ as it works. Keep them there instead of scattering them.
