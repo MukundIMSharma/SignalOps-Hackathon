@@ -26,3 +26,6 @@ Format: `date — decision — reason`
 - 2026-11-24 — Orchestrator takes an injected `call(server, tool, args)` — tests replay the snapshot and simulate outages without MCP; live uses `open_caller()`.
 - 2026-11-24 — Skipped LLM intent parsing / query planning — the workflow is fixed and answers questions A/B/C from one report; add only if a free-form follow-up is demoed.
 - 2026-11-24 — LLM_FALLBACK_MODEL=gemini-3.5-flash — 3.8-flash returned 503 repeatedly on free tier.
+- 2026-11-24 — New MCP sessions per request (investigation, overview, systems), runner installed globally (~2s) — no connection state to manage, and tools added by `synapse build --discover` appear without restarting the backend.
+- 2026-11-24 — Overview data also via MCP (not direct HTTP) — keeps the "business data only through Synapse" rule simple; direct HTTP only in /api/systems health checks.
+- 2026-11-24 — Report published before the LLM summary (`narrative.source: pending`) — Gemini free tier can take ~60s.

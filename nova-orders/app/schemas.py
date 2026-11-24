@@ -80,6 +80,7 @@ class OrderHealth(BaseModel):
     total_orders: int
     by_status: dict[str, int]
     delayed_orders: int
+    delayed_customers: int
     delayed_by_reason: dict[str, int]
     sla_breached_orders: int
     at_risk_orders: int

@@ -46,3 +46,4 @@ cd signalops-backend
 .venv/Scripts/python list_tools.py
 .venv/Scripts/python -m pytest -q tests/test_mcp_tools.py   # 3 passed
 ```
+- **Install the MCP runner globally:** `npm install -g @2ndbrainlabs-ai/synapse-mcp` (v0.0.4). Session start drops from 9–20s (`npx -y` registry check) to ~2s for both servers. `mcp_clients/servers.py` uses `synapse-mcp` if on PATH, else npx.

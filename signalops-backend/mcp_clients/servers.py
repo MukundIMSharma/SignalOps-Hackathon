@@ -11,17 +11,19 @@ load_dotenv(os.path.join(os.path.dirname(__file__), "..", "..", ".env"))
 
 SERVERS = {
     "orders": {"server_id": "6ab65632-0790-4e06-8b0e-77bb3d448920",
-               "base_url": os.getenv("ORDERS_API_URL", "http://localhost:8001")},
+               "base_url": os.getenv("ORDERS_API_URL", "http://localhost:8001"), "repo": "nova-orders"},
     "inventory": {"server_id": "bf451b7a-95c9-4658-b2a6-91708fb7ef84",
-                  "base_url": os.getenv("INVENTORY_API_URL", "http://localhost:8002")},
+                  "base_url": os.getenv("INVENTORY_API_URL", "http://localhost:8002"), "repo": "nova-inventory"},
 }
 
 
 def params(name: str) -> StdioServerParameters:
     s = SERVERS[name]
     env = {**os.environ, "SYNAPSE_SERVER_ID": s["server_id"], "ENDPOINT_BASE_URL": s["base_url"]}
-    return StdioServerParameters(command=shutil.which("npx") or "npx",
-                                 args=["-y", "@2ndbrainlabs-ai/synapse-mcp"], env=env)
+    # global install (`npm i -g @2ndbrainlabs-ai/synapse-mcp`) starts in ~1s; `npx -y` checks the registry (9-20s)
+    if exe := shutil.which("synapse-mcp"):
+        return StdioServerParameters(command=exe, args=[], env=env)
+    return StdioServerParameters(command=shutil.which("npx") or "npx", args=["-y", "@2ndbrainlabs-ai/synapse-mcp"], env=env)
 
 
 @asynccontextmanager

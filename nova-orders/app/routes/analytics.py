@@ -26,6 +26,7 @@ def get_order_health(db: Session = Depends(get_db)):
         total_orders=len(orders),
         by_status=by_status,
         delayed_orders=len(delayed),
+        delayed_customers=len({o.customer_id for o in delayed}),
         delayed_by_reason=reasons,
         sla_breached_orders=sum(o.sla_breached for o in orders),
         at_risk_orders=sum(o.shipment_id is None and not o.sla_breached for o in delayed),

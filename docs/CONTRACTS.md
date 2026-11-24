@@ -28,7 +28,7 @@ Entities:
 - **Customer:** customer_id, name, tier (standard|vip), contact_preference (email|phone|sms), priority_flag
 - **Shipment:** shipment_id, order_id, carrier, status (in_transit|delivered|exception), created_at, expected_delivery, actual_delivery (nullable), tracking_status
 - **SupportTicket:** ticket_id, customer_id, order_id (nullable), category (delivery_delay|billing|product_question), status (open|closed), subject, created_at
-- **OrderHealth:** as_of, total_orders, by_status{}, delayed_orders, delayed_by_reason{}, sla_breached_orders, at_risk_orders, delayed_order_value (all delay causes), open_tickets, open_delay_tickets
+- **OrderHealth:** as_of, total_orders, by_status{}, delayed_orders, delayed_customers, delayed_by_reason{}, sla_breached_orders, at_risk_orders, delayed_order_value (all delay causes), open_tickets, open_delay_tickets
 
 ## Inventory API (`nova-inventory`, port 8002) — LOCKED
 | Method | Endpoint | operationId | Filters / params |

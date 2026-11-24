@@ -94,6 +94,7 @@ def test_order_health(client):
     h = get(client, "/analytics/order-health")
     assert h["total_orders"] == 60
     assert h["delayed_orders"] == 30
+    assert h["delayed_customers"] == 26  # 24 incident + 2 carrier-delay customers
     assert h["delayed_by_reason"] == {"stock_allocation_failed": 28, "carrier_exception": 2}
     assert h["sla_breached_orders"] == 12
     assert h["at_risk_orders"] == 16
