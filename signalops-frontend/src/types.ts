@@ -36,6 +36,22 @@ export interface Action {
   expected_outcome: string
   requires_approval: boolean
   approval_status: 'pending' | 'approved' | 'rejected' | 'not_required'
+  approver?: string; decided_at?: string; decision_note?: string; idempotency_key?: string
+  execution?: { status: 'succeeded' | 'failed'; result: Record<string, unknown> | null; error: string | null; executed_at: string }
+}
+
+export interface ApprovalRow extends Action {
+  investigation_id: string; investigation_status: InvStatus; created_at: string; evidence: Evidence[]
+}
+
+export interface AuditEntry { audit_id: string; at: string; event: string; investigation_id?: string; action_id?: string
+  action_type?: string; approver?: string; note?: string; error?: string; result?: Record<string, unknown>; [k: string]: unknown }
+
+export interface Simulation {
+  transfers: { transfer_id: string; product_id: string; source: string; destination: string; units: number; at: string }[]
+  ticket_priorities: Record<string, string>
+  incidents: { incident_id: string; title: string; severity: string; owner: string; at: string }[]
+  drafts: { draft_id: string; recipients: number; subject: string; body: string; sent: boolean; at: string }[]
 }
 
 export interface ToolEvent { seq: number; server: string; tool: string; args: Record<string, unknown>; ok: boolean; ms: number; summary: string }

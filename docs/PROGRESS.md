@@ -52,11 +52,11 @@
 - [x] Connect backend
 
 ## Milestone 5 — Approval and audit
-- [ ] Action preview
-- [ ] Approve/reject
-- [ ] Simulated action execution
-- [ ] Idempotency
-- [ ] Audit trail
+- [x] Action preview
+- [x] Approve/reject
+- [x] Simulated action execution
+- [x] Idempotency
+- [x] Audit trail
 
 ## Milestone 6 — Synapse live discovery
 - [ ] Add `/inventory/incidents`

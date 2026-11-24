@@ -24,3 +24,6 @@ Thumbs.db
 
 # synapse project config holds the encrypted API key
 **/.synapse/config.json
+
+# runtime audit log
+signalops-backend/audit.jsonl

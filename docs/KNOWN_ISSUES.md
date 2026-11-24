@@ -12,6 +12,7 @@ Format per issue: title, status (open/workaround/fixed), exact error text, what 
 - **Frontend bundle 708 kB** — status: open, harmless (Vite >500 kB warning; Recharts). Code-split only if load time matters.
 
 ## Fixed
+- **Duplicate approve returned 500 instead of 409 (live only)** — fixed 2026-11-24. ActionError raised inside `open_caller()` left through the MCP anyio task group as an ExceptionGroup. Caught inside the block; test fake now wraps in a task group too.
 - **MCP runner needs key in env** — fixed 2026-11-24, SYNAPSE_API_KEY in .env.
 - **Synapse API key missing** — fixed 2026-11-24 via `synapse config set-key --global`.
 - **Synapse detected wrong paths (router prefix ignored)** — fixed 2026-11-24, full paths in decorators.

@@ -97,7 +97,7 @@ queued | investigating | partial | awaiting_approval | completed | failed | canc
 
 ## Action (proposal) — IMPLEMENTED; approval fields added in Milestone 5
 action_id, action_type (inventory_transfer|prioritize_tickets|draft_customer_update|create_internal_incident|monitor_orders), description, inputs{}, affected_entities[], risk_level (high|medium|low), evidence_ids[], expected_outcome, requires_approval, approval_status (pending|approved|rejected|not_required)
-M5 adds: approver_id, timestamp, idempotency_key, execution_result
+After a decision (M5, implemented): approver, decided_at, decision_note, idempotency_key (`{investigation_id}:{action_id}`), execution `{status: succeeded|failed, result, error, executed_at}` (approve only).
 
 ## Investigation report — IMPLEMENTED (`Investigation.run()`)
 ```

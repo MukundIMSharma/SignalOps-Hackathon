@@ -18,6 +18,7 @@ from pydantic import BaseModel
 from agent.narrative import narrate
 from agent.orchestrator import DEFAULT_REQUEST, Investigation, ToolError
 from mcp_clients.servers import SERVERS, connect, open_caller
+from services import approvals, audit
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 app = FastAPI(title="SignalOps API", version="1.0.0")
@@ -48,6 +49,7 @@ async def start_investigation(body: StartRequest):
     inv = {"id": inv_id, "request": body.request, "status": "queued", "created_at": now(),
            "completed_at": None, "events": [], "report": None}
     INVESTIGATIONS[inv_id] = inv
+    audit.record("investigation_started", investigation_id=inv_id, request=body.request)
     asyncio.create_task(_run(inv))
     return _public(inv)
 
@@ -63,10 +65,14 @@ async def _run(inv: dict):
             report = await Investigation(call, on_event=emit).run(inv["request"])
     except Exception as e:  # unexpected crash: fail loudly, never a fake result
         inv["status"] = "failed"
+        audit.record("investigation_failed", investigation_id=inv["id"], error=f"{type(e).__name__}: {e}"[:300])
         emit({"type": "status", "status": "failed", "error": f"{type(e).__name__}: {e}"[:300]})
         return
     report["narrative"] = {"text": None, "source": "pending", "model": None, "error": None}
     inv["report"], inv["status"] = report, report["status"]
+    audit.record("report_ready", investigation_id=inv["id"], status=report["status"],
+                 root_cause=report["findings"][0]["title"] if report["findings"] else None,
+                 proposed_actions=[a["action_id"] for a in report["actions"]], gaps=report["gaps"])
     emit({"type": "report", "status": report["status"]})
     report["narrative"] = await narrate(report)  # report is already visible; summary arrives later
     emit({"type": "narrative", "source": report["narrative"]["source"]})
@@ -118,6 +124,59 @@ async def stream_events(inv_id: str):
             await asyncio.sleep(0.2)
 
     return StreamingResponse(gen(), media_type="text/event-stream", headers={"Cache-Control": "no-cache"})
+
+
+# ---- approvals / audit / simulation -------------------------------------------------------------
+class Decision(BaseModel):
+    approver: str = "demo-operator"
+    note: str = ""
+
+
+async def _decide(inv_id: str, action_id: str, approve: bool, body: Decision):
+    if not body.approver.strip():
+        raise HTTPException(422, "approver is required")
+    inv = _get(inv_id)
+    try:
+        if approve and approvals.find(inv, action_id)["action_type"] in approvals.NEEDS_MCP:
+            async with open_caller() as call:
+                # catch inside: the MCP task group would wrap it in an ExceptionGroup on the way out
+                try:
+                    return await approvals.decide(inv, action_id, True, body.approver, body.note, call)
+                except approvals.ActionError as e:
+                    err = e
+        else:
+            return await approvals.decide(inv, action_id, approve, body.approver, body.note, None)
+    except approvals.ActionError as e:
+        err = e
+    raise HTTPException(err.status, str(err))
+
+
+@app.post("/api/investigations/{inv_id}/actions/{action_id}/approve")
+async def approve_action(inv_id: str, action_id: str, body: Decision = Decision()):
+    return await _decide(inv_id, action_id, True, body)
+
+
+@app.post("/api/investigations/{inv_id}/actions/{action_id}/reject")
+async def reject_action(inv_id: str, action_id: str, body: Decision = Decision()):
+    return await _decide(inv_id, action_id, False, body)
+
+
+@app.get("/api/approvals")
+def list_approvals():
+    rows = [{**a, "investigation_id": i["id"], "investigation_status": i["status"], "created_at": i["created_at"],
+             "evidence": [e for e in i["report"]["evidence"] if e["evidence_id"] in a["evidence_ids"]]}
+            for i in INVESTIGATIONS.values() if i["report"] for a in i["report"]["actions"] if a["requires_approval"]]
+    return sorted(rows, key=lambda r: (r["approval_status"] != "pending", r["created_at"]), reverse=False)
+
+
+@app.get("/api/audit")
+def audit_log(investigation_id: str | None = None):
+    return audit.entries(investigation_id)
+
+
+@app.get("/api/simulation")
+def simulation():
+    return approvals.SIM
 
 
 # ---- overview ----------------------------------------------------------------------------------

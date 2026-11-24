@@ -24,7 +24,10 @@ def fake_call(snap=None, down: set[str] = frozenset(), broken_tools: set[str] = 
             case "get_delayed_orders": return page(s["delayed_orders"])
             case "get_support_tickets": return page(s["tickets"])
             case "get_shipment_status": return page(s["shipments"])
-            case "get_customer_details": return s["customers"][args["customer_id"]]
+            case "get_customer_details":
+                if args["customer_id"] not in s["customers"]:
+                    raise ToolError(f"get_customer_details: Customer {args['customer_id']} not found")
+                return s["customers"][args["customer_id"]]
             case "get_inventory_sync_status": return page(s["sync_status"])
             case "get_warehouse_status": return page(s["warehouses"])
             case "get_product_stock": return s["product_stock_SKU-104"]

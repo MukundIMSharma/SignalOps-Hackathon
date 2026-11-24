@@ -32,3 +32,7 @@ Format: `date — decision — reason`
 - 2026-11-24 — Frontend uses Tailwind v4 with small hand-written components instead of the shadcn/ui CLI — same look (shadcn is copy-in Tailwind code), no Radix dependency tree, nothing interactive enough yet to need it.
 - 2026-11-24 — Charts follow the dataviz skill's reference palette (dark series blue #3987e5, fixed status colors with icon + text); only one single-series chart + one status split, so no categorical palette to validate.
 - 2026-11-24 — Cross-system questions A/B/C answered in a panel derived from the same report — the workflow is fixed; one run answers all three with evidence from both systems.
+- 2026-11-24 — Actions execute against an in-memory simulated ledger, never the business APIs — plan §12 demo-safe actions; MCP tools stay read-only.
+- 2026-11-24 — Approval re-validates via MCP at execution time and counts earlier simulated transfers — a stale plan or a second investigation can't over-commit W2 stock.
+- 2026-11-24 — Idempotency = one decision per `{investigation}:{action}`; status flips before any await, so no lock is needed.
+- 2026-11-24 — Audit log is append-only JSONL on disk — survives restarts even though investigations are in memory.

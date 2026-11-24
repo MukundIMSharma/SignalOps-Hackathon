@@ -194,10 +194,7 @@ export function ActionsList({ actions }: { actions: Action[] }) {
               </div>
               <p className="mt-0.5 text-xs text-zinc-500">Expected: {a.expected_outcome} · evidence {a.evidence_ids.join(', ')}</p>
             </div>
-            <Badge t={a.approval_status === 'approved' ? 'green' : a.approval_status === 'rejected' ? 'red' : a.approval_status === 'pending' ? 'amber' : 'zinc'}
-              icon={a.approval_status === 'pending' ? '⏸' : a.approval_status === 'approved' ? '✓' : a.approval_status === 'rejected' ? '✕' : '–'}>
-              {a.approval_status === 'not_required' ? 'no approval needed' : a.approval_status}
-            </Badge>
+            <ActionStatus a={a} />
           </li>
         ))}
       </ul>
@@ -245,4 +242,12 @@ export function Activity({ events }: { events: StreamEvent[] }) {
       ))}
     </ol>
   )
+}
+
+function ActionStatus({ a }: { a: Action }) {
+  if (a.execution?.status === 'failed') return <Badge t="red" icon="!">execution failed</Badge>
+  if (a.execution?.status === 'succeeded') return <Badge t="green" icon="✓">executed (simulated)</Badge>
+  if (a.approval_status === 'rejected') return <Badge t="zinc" icon="✕">rejected</Badge>
+  if (a.approval_status === 'pending') return <Badge t="amber" icon="⏸">pending approval</Badge>
+  return <Badge t="zinc" icon="–">{a.approval_status === 'not_required' ? 'no approval needed' : a.approval_status}</Badge>
 }
