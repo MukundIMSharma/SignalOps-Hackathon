@@ -1,26 +1,26 @@
 # Progress
 
 **Last updated:** 2026-11-24
-**Current focus:** Milestone 0 — setup / scope lock
-**Last completed:** Project memory docs created (CLAUDE.md + docs/)
-**Next up:** git init + GitHub repo, lock contracts in CONTRACTS.md (incl. exact seed counts), confirm Synapse CLI and LLM access
+**Current focus:** Milestone 2 — Synapse/MCP proof (blocked: Synapse CLI install command needed)
+**Last completed:** Milestone 1 — both APIs built, seeded, 21/21 tests passing, run live on 8001/8002
+**Next up:** install Synapse, generate both MCP servers; GitHub remote; confirm LLM API key
 
 ## Milestone 0 — Setup / scope lock
-- [ ] Create GitHub repo(s)
-- [x] Create project directories (docs/ only so far)
-- [ ] Agree on API schemas (draft in CONTRACTS.md)
-- [ ] Create task board / issue list
-- [ ] Set up environment and `.env.example`
+- [ ] Create GitHub repo(s) — local git done (branch main); remote pending
+- [x] Create project directories
+- [x] Agree on API schemas (CONTRACTS.md, business APIs locked)
+- [ ] Create task board / issue list — using PROGRESS.md for now
+- [x] Set up environment and `.env.example` (`.env` itself not created)
 - [ ] Confirm model/API access
 - [ ] Confirm Synapse CLI works
 
 ## Milestone 1 — Two APIs + seed data
-- [ ] Orders schema/routes
-- [ ] Inventory schema/routes
-- [ ] Deterministic seed data
-- [ ] OpenAPI docs
-- [ ] Unit/API tests
-- [ ] Health endpoints
+- [x] Orders schema/routes
+- [x] Inventory schema/routes
+- [x] Deterministic seed data
+- [x] OpenAPI docs
+- [x] Unit/API tests
+- [x] Health endpoints
 
 ## Milestone 2 — Synapse/MCP proof
 - [ ] Generate Orders MCP

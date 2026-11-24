@@ -1,68 +1,66 @@
 # Contracts
 
-**Status:** DRAFT from MASTER_PLAN §7–§10. Nothing here is implemented or verified yet. Mark each section `LOCKED` once agreed; change it only together with the code.
+Business APIs are **LOCKED as implemented** (2026-11-24, Milestone 1, tests passing). Agent-side schemas are DRAFT until Milestone 3. Change a contract only together with the code and its tests.
 
-## Orders API (`nova-orders`) — DRAFT
-| Method | Endpoint | Purpose |
-|---|---|---|
-| GET | `/health` | Health check |
-| GET | `/orders` | List; filter by status, priority, sku, date, warehouse; paginated |
-| GET | `/orders/{order_id}` | Order detail |
-| GET | `/orders/delayed` | Delayed orders |
-| GET | `/orders/at-risk` | Orders likely to breach SLA |
-| GET | `/customers/{customer_id}` | Customer details |
-| GET | `/customers/{customer_id}/orders` | Customer history |
-| GET | `/shipments` | Shipment list/filter |
-| GET | `/analytics/order-health` | Summary statistics |
+## Common conventions (both APIs)
+- `operationId` = Python function name = intended MCP tool name.
+- List responses: `{ items: [...], total, limit, offset, as_of }`.
+- Errors: `{ "error": { "code": "not_found" | "validation_error" | "http_error", "message": "..." } }` with 404 / 422.
+- Fixed demo clock `as_of` = `DEMO_AS_OF` (default `2026-11-24T12:00:00`). Timestamps are naive ISO-8601, demo-local.
+- `GET /health` → `{ status: "ok", service, as_of }`.
+
+## Orders API (`nova-orders`, port 8001) — LOCKED
+| Method | Endpoint | operationId | Filters / params |
+|---|---|---|---|
+| GET | `/health` | health | |
+| GET | `/orders` | list_orders | status, priority, product_id, warehouse_id, customer_id, order_date_from, order_date_to, limit (1–200, default 50), offset |
+| GET | `/orders/delayed` | get_delayed_orders | product_id, warehouse_id, delay_reason, limit (default 100), offset |
+| GET | `/orders/at-risk` | get_at_risk_orders | limit, offset — delayed, undispatched, dispatch date not yet passed |
+| GET | `/orders/{order_id}` | get_order_details | |
+| GET | `/customers/{customer_id}` | get_customer_details | |
+| GET | `/customers/{customer_id}/orders` | get_customer_orders | limit, offset |
+| GET | `/shipments` | get_shipment_status | order_id, status, carrier, limit, offset |
+| GET | `/tickets` | get_support_tickets | customer_id, order_id, category, status, limit, offset |
+| GET | `/analytics/order-health` | get_order_health | |
 
 Entities:
-- **Order:** order_id, customer_id, product_id, quantity, order_date, expected_dispatch_date, status, priority, unit_price, total_amount, warehouse_id, shipment_id (nullable)
-- **Customer:** customer_id, name, tier (standard|vip), contact_preference, priority_flag
-- **Shipment:** shipment_id, order_id, carrier, status, created_at, expected_delivery, actual_delivery (nullable), tracking_status
+- **Order:** order_id, customer_id, product_id, quantity, order_date, expected_dispatch_date, status (pending|processing|delayed|shipped|delivered|cancelled), delay_reason (stock_allocation_failed|carrier_exception|null), priority (normal|high), unit_price, total_amount, warehouse_id, shipment_id (nullable), **computed:** sla_breached (no shipment and expected_dispatch_date < as_of), days_overdue (whole days rounded up, 0 if not breached)
+- **Customer:** customer_id, name, tier (standard|vip), contact_preference (email|phone|sms), priority_flag
+- **Shipment:** shipment_id, order_id, carrier, status (in_transit|delivered|exception), created_at, expected_delivery, actual_delivery (nullable), tracking_status
+- **SupportTicket:** ticket_id, customer_id, order_id (nullable), category (delivery_delay|billing|product_question), status (open|closed), subject, created_at
+- **OrderHealth:** as_of, total_orders, by_status{}, delayed_orders, delayed_by_reason{}, sla_breached_orders, at_risk_orders, delayed_order_value (all delay causes), open_tickets, open_delay_tickets
 
-Open: where support tickets live (Orders field vs. separate dataset) — decide and record in DECISIONS.md.
+## Inventory API (`nova-inventory`, port 8002) — LOCKED
+| Method | Endpoint | operationId | Filters / params |
+|---|---|---|---|
+| GET | `/health` | health | |
+| GET | `/products` | list_products | category, limit, offset |
+| GET | `/products/{product_id}` | get_product_details | |
+| GET | `/stock` | get_warehouse_inventory | product_id, warehouse_id, limit, offset |
+| GET | `/stock/low` | get_low_stock_products | warehouse_id — available < reorder_threshold |
+| GET | `/stock/{product_id}` | get_product_stock | |
+| GET | `/warehouses` | get_warehouse_status | |
+| GET | `/sync/status` | get_inventory_sync_status | status, warehouse_id |
+| GET | `/analytics/stock-health` | get_stock_health | |
 
-## Inventory API (`nova-inventory`) — DRAFT
-| Method | Endpoint | Purpose |
-|---|---|---|
-| GET | `/health` | Health check |
-| GET | `/products` | Product catalog |
-| GET | `/products/{product_id}` | Product details |
-| GET | `/stock` | Stock query/filter |
-| GET | `/stock/low` | Low stock |
-| GET | `/stock/{product_id}` | Stock across warehouses |
-| GET | `/warehouses` | Warehouse status |
-| GET | `/sync/status` | Sync status |
-| GET | `/analytics/stock-health` | Stock metrics |
+Entities:
+- **Product:** product_id, name, category, reorder_threshold
+- **Warehouse:** warehouse_id, name, location, status (operational|degraded|offline)
+- **Stock:** product_id, warehouse_id, available_quantity, reserved_quantity, last_updated
+- **LowStock:** Stock + reorder_threshold, shortfall
+- **ProductStock:** product_id, reorder_threshold, total_available, total_reserved, warehouses[Stock], as_of
+- **SyncStatus:** sync_id, source, warehouse_id, status (success|failed), last_attempt, last_success, failing_since (nullable), error_code, error_message, affected_products[], severity (info|warning|critical)
+- **StockHealth:** as_of, products, warehouses, warehouses_by_status{}, total_available_units, total_reserved_units, low_stock_positions, out_of_stock_positions, failed_syncs, products_affected_by_sync_failures[]
 
-Reserved for Milestone 6 live demo — **do not implement before then:** `GET /inventory/incidents`
+Reserved for Milestone 6 live demo — **not implemented, a test asserts it is absent:** `GET /inventory/incidents`
 ```json
 { "incident_id": "INV-2026-042", "severity": "critical", "product_id": "SKU-104", "warehouse_id": "W1",
   "incident_type": "inventory_sync_failure", "occurred_at": "2026-11-23T09:42:00",
   "description": "Inventory synchronization failed; availability may be stale." }
 ```
 
-Entities:
-- **Product:** product_id, name, category, reorder_threshold, unit_price (optional)
-- **Warehouse:** warehouse_id, name, location, status
-- **Stock:** product_id, warehouse_id, available_quantity, reserved_quantity, last_updated
-- **SyncStatus:** sync_id, source, status, last_attempt, last_success, error_code, error_message, affected_products, severity
-
-## MCP tool names — PROPOSED (replace with the names Synapse actually generates)
-| Server | Tool | Endpoint |
-|---|---|---|
-| orders | get_delayed_orders | `/orders/delayed` |
-| orders | get_order_details | `/orders/{order_id}` |
-| orders | get_customer_details | `/customers/{customer_id}` |
-| orders | get_customer_orders | `/customers/{customer_id}/orders` |
-| orders | get_shipment_status | `/shipments` |
-| orders | get_order_health | `/analytics/order-health` |
-| inventory | get_product_stock | `/stock/{product_id}` |
-| inventory | get_low_stock_products | `/stock/low` |
-| inventory | get_warehouse_inventory | `/stock` |
-| inventory | get_warehouse_status | `/warehouses` |
-| inventory | get_inventory_sync_status | `/sync/status` |
-| inventory | get_stock_health | `/analytics/stock-health` |
+## MCP tools — PENDING Synapse (Milestone 2)
+Intended names = operationIds above. Replace this line with the names Synapse actually generates and which endpoints were selected.
 
 ## Evidence schema — DRAFT
 ```json
@@ -74,7 +72,7 @@ Entities:
   "source_tool": "get_product_stock",
   "source_endpoint": "/stock/SKU-104",
   "entity_ids": ["SKU-104", "W1"],
-  "observed_at": "2026-11-23T09:42:00",
+  "observed_at": "2026-11-24T12:00:00",
   "data": { "available_quantity": 0 }
 }
 ```

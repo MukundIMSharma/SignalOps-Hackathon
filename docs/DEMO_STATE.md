@@ -1,26 +1,39 @@
 # Demo state
 
-**Status:** targets from MASTER_PLAN §1 — not seeded, not verified.
+**Status:** LOCKED (2026-11-24). Seeded in `nova-orders/app/seed.py` and `nova-inventory/app/seed.py`; "✓ pytest" = asserted by API tests against the seeded API.
 
 ## Scenario
-NovaCommerce: inventory sync failure at Warehouse W1 for SKU-104. W2 holds enough stock to recover a subset.
+NovaCommerce. At 2026-11-23T09:42:00 the W1 warehouse-management sync (source `W1-WMS`) started rejecting the SKU-104 payload. Since then W1 reports SKU-104 `available_quantity = 0` (last good update 09:41), so order allocation for SKU-104 at W1 fails and those orders sit in `delayed` with `delay_reason = stock_allocation_failed`. W2 has spare SKU-104 stock.
 
-## Deterministic counts (targets — fill exact numbers, then make seed.py match)
-| Metric | Target | Seeded | Verified via API |
-|---|---|---|---|
-| Delayed orders linked to SKU-104 | 28 | – | – |
-| Orders past expected dispatch date (subset of 28? decide) | 12 | – | – |
-| Customers with delay tickets | 9 | – | – |
-| VIP / high-priority customers | 4 | – | – |
-| Affected customers (distinct) | TBD | – | – |
-| Order value affected | TBD | – | – |
-| W1 available SKU-104 | 0 | – | – |
-| W2 available SKU-104 | TBD | – | – |
-| Recoverable orders via W2 transfer | TBD | – | – |
-| Unrecoverable after transfer | TBD | – | – |
-| Sync failure timestamp | 2026-11-23T09:42:00 | – | – |
+Two unrelated delayed orders (SKU-102, W2, carrier exception) exist so the agent has to *correlate* rather than assume every delay is the incident.
 
-Overlapping counts are never added together in reports.
+**Fixed clock:** `AS_OF = 2026-11-24T12:00:00` (env `DEMO_AS_OF`). SLA breach = not dispatched and `expected_dispatch_date < AS_OF`. No wall-clock time is used, so results never drift.
+
+## Deterministic counts
+| # | Metric | Value | Definition / overlap | Seeded | Verified |
+|---|---|---|---|---|---|
+| 1 | Total orders | 60 | | ✓ | ✓ pytest |
+| 2 | Delayed orders (all causes) | 30 | status = delayed | ✓ | ✓ pytest |
+| 3 | Delayed orders linked to incident | 28 | subset of #2: SKU-104, W1, stock_allocation_failed | ✓ | ✓ pytest |
+| 4 | Delayed, unrelated | 2 | subset of #2: SKU-102, W2, carrier_exception | ✓ | ✓ pytest |
+| 5 | Incident orders past dispatch date (SLA breached) | 12 | subset of #3 | ✓ | ✓ pytest |
+| 6 | Incident orders at risk (not yet breached) | 16 | subset of #3; #5 + #6 = #3 | ✓ | ✓ pytest |
+| 7 | Affected customers (distinct, incident) | 24 | 4 customers have 2 orders each (C-1003, C-1006, C-1011, C-1018) | ✓ | ✓ pytest |
+| 8 | Affected VIP customers | 4 | subset of #7: C-1003, C-1008, C-1015, C-1021 (6 VIPs in system) | ✓ | ✓ pytest |
+| 9 | Affected customers with delay tickets | 9 | subset of #7: C-1002, C-1003, C-1005, C-1008, C-1010, C-1013, C-1016, C-1019, C-1023 | ✓ | ✓ pytest |
+| 10 | VIP ∩ ticket | 2 | C-1003, C-1008 | ✓ | by construction |
+| 11 | Units on incident orders | 56 | quantities cycle 1,2,3,2 | ✓ | ✓ pytest |
+| 12 | Order value affected | 7,224.00 | 56 × 129.00 (SKU-104 unit price) | ✓ | ✓ pytest |
+| 13 | W1 SKU-104 available | 0 | stale since 2026-11-23T09:41:00 | ✓ | ✓ pytest |
+| 14 | W2 SKU-104 available | 60 | reorder threshold 20 | ✓ | ✓ pytest |
+| 15 | Transferable from W2 | 40 | available − reorder threshold (keep safety stock) | ✓ | ✓ pytest |
+| 16 | Shortage after transfer | 16 units | 56 − 40 | ✓ | by construction |
+| 17 | Recoverable orders via transfer | TBD (M3) | greedy in priority rank, skip orders that don't fit | – | – |
+| 18 | Unrecoverable after transfer | TBD (M3) | 28 − #17 | – | – |
+| 19 | Support tickets total | 11 | 9 delay (#9) + 2 unrelated (billing, product question) | ✓ | ✓ pytest |
+| 20 | Customers total | 40 | | ✓ | ✓ pytest |
+
+Never add overlapping rows (e.g. #5 + #9) in reports.
 
 ## Demo prompt
 > Investigate all delayed orders. Identify the root cause, which customers are affected, the business impact, and what we should do next.
@@ -31,7 +44,15 @@ Cross-system questions:
 - C (optional): Prioritize the delayed orders based on SLA breach, customer tier, and complaints. Explain why each customer is prioritized.
 
 ## Commands
-TBD (start APIs, reseed, start MCP servers, start backend/frontend, `synapse build --discover`).
+```bash
+# reseed (deterministic)
+cd nova-orders && .venv/Scripts/python -m app.seed
+cd nova-inventory && .venv/Scripts/python -m app.seed
+# run
+cd nova-orders && .venv/Scripts/python -m uvicorn app.main:app --port 8001
+cd nova-inventory && .venv/Scripts/python -m uvicorn app.main:app --port 8002
+```
+TBD: MCP servers, backend, frontend, `synapse build --discover`.
 
 ## Rehearsals
 | # | Date | Steps passed | Notes |
