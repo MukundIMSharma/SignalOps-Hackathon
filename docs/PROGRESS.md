@@ -2,8 +2,8 @@
 
 **Last updated:** 2026-11-24
 **Current focus:** Milestone 3 — agent investigation
-**Last completed:** Milestone 2 — all 17 MCP tools called through Synapse and verified (3/3 integration tests)
-**Next up:** confirm Gemini model id; deterministic impact/prioritization/allocation + tests; then orchestrator
+**Last completed:** M3 deterministic core: correlation, impact, prioritization, transfer allocation (5 tests)
+**Next up:** Gemini latency fix; orchestrator (evidence, findings, partial results) + report
 
 ## Milestone 0 — Setup / scope lock
 - [x] Create GitHub repo(s) — origin pushed
@@ -11,7 +11,7 @@
 - [x] Agree on API schemas (CONTRACTS.md, business APIs locked)
 - [ ] Create task board / issue list — using PROGRESS.md for now
 - [x] Set up environment and `.env.example` (`.env` itself not created)
-- [ ] Confirm model/API access — Gemini chosen; key + model id pending
+- [x] Confirm model/API access — gemini-3.8-flash responds (slow, see KNOWN_ISSUES)
 - [x] Confirm Synapse CLI works — v0.1.9, both builds succeeded
 
 ## Milestone 1 — Two APIs + seed data
@@ -33,11 +33,11 @@
 ## Milestone 3 — Agent investigation
 - [ ] Orchestrator and investigation state
 - [ ] Tool calling
-- [ ] Cross-system correlation
+- [x] Cross-system correlation
 - [ ] Evidence collection
 - [ ] Root cause
-- [ ] Impact calculations
-- [ ] Customer prioritization
+- [x] Impact calculations
+- [x] Customer prioritization
 - [ ] Report generation
 - [ ] Failure/partial result handling
 

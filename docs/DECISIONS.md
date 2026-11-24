@@ -19,3 +19,6 @@ Format: `date — decision — reason`
 - 2026-11-24 — `/health` not exposed as MCP tool — health checks use direct HTTP per plan §5.
 - 2026-11-24 — Agent filters full lists in code instead of passing filters to tools — Synapse v0.1.9 Auto passes path params only; filtering in code is deterministic anyway (plan §10).
 - 2026-11-24 — Route docstrings = summaries — Synapse reads docstrings (not `summary=`) for tool descriptions.
+- 2026-11-24 — Priority weights: VIP 30, SLA breached 25 + 5/day overdue (cap 3), open complaint 20, at-risk 10; order value not scored — plan §11 (transparent rules, don't penalise low-value customers); ties by dispatch date then order_id.
+- 2026-11-24 — Transfer allocation: greedy in priority order, skip orders that don't fit — keeps priority meaningful and still uses all 40 units (20 recovered).
+- 2026-11-24 — Backend unit tests run on a JSON snapshot of the seeded APIs (tests/fixtures) — fast/offline; MCP integration test covers the live path.

@@ -28,8 +28,8 @@ Two unrelated delayed orders (SKU-102, W2, carrier exception) exist so the agent
 | 14 | W2 SKU-104 available | 60 | reorder threshold 20 | ✓ | ✓ pytest |
 | 15 | Transferable from W2 | 40 | available − reorder threshold (keep safety stock) | ✓ | ✓ pytest |
 | 16 | Shortage after transfer | 16 units | 56 − 40 | ✓ | by construction |
-| 17 | Recoverable orders via transfer | TBD (M3) | greedy in priority rank, skip orders that don't fit | – | – |
-| 18 | Unrecoverable after transfer | TBD (M3) | 28 − #17 | – | – |
+| 17 | Recoverable orders via transfer | 20 | greedy in priority rank (agent/prioritization.py weights), skip orders that don't fit; uses all 40 units | ✓ | ✓ pytest |
+| 18 | Unrecoverable after transfer | 8 | 28 − #17 | ✓ | ✓ pytest |
 | 19 | Support tickets total | 11 | 9 delay (#9) + 2 unrelated (billing, product question) | ✓ | ✓ pytest |
 | 20 | Customers total | 40 | | ✓ | ✓ pytest |
 
