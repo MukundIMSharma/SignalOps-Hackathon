@@ -46,8 +46,9 @@ signalops/
 ├── docs/                 # MASTER_PLAN, PROGRESS, CONTRACTS, DECISIONS, KNOWN_ISSUES, DEMO_STATE, plans/
 ├── nova-orders/          # Orders API (FastAPI + SQLite)
 ├── nova-inventory/       # Inventory API (FastAPI + SQLite)
-├── signalops-backend/    # orchestrator, agent/, mcp/ clients, services/, prompts/
-└── signalops-frontend/   # React app
+├── signalops-backend/    # main.py (API), agent/, mcp_clients/, services/, prompts/
+├── signalops-frontend/   # React app
+└── scripts/              # start-demo.ps1, reset-demo.ps1, rehearse.py
 ```
 Details per module: `docs/MASTER_PLAN.md` §6.
 
