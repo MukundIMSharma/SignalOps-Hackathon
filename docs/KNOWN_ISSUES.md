@@ -8,6 +8,9 @@ Format per issue: title, status (open/workaround/fixed), exact error text, what 
 
 - **Gemini free tier slow / 503** — status: open. gemini-3.8-flash: `503 UNAVAILABLE ... experiencing high demand` once; then "Reply ok" took 155s (3.7-flash 75s, 3.5-flash 19s; 2.5-flash 404 retired). Tried thinking_level=minimal: `400 Thinking level MINIMAL is not supported` on 3.8-flash. Workaround in place: LLM only writes the summary; LLM_FALLBACK_MODEL=gemini-3.5-flash (worked, ~55s); then labelled template. UI must show the report before the summary arrives.
 
+- **Gemini summary timed out in UI run** — status: open. Both models hit the 60s timeout (`gemini-3.8-flash: TimeoutError; gemini-3.5-flash: TimeoutError`); the UI correctly showed the labelled template. For the demo: prewarm with one run, or accept the template.
+- **Frontend bundle 708 kB** — status: open, harmless (Vite >500 kB warning; Recharts). Code-split only if load time matters.
+
 ## Fixed
 - **MCP runner needs key in env** — fixed 2026-11-24, SYNAPSE_API_KEY in .env.
 - **Synapse API key missing** — fixed 2026-11-24 via `synapse config set-key --global`.

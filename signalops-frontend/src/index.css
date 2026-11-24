@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+  /* dataviz reference palette, dark mode */
+  --color-series-1: #3987e5;
+  --color-good: #0ca30c;
+  --color-warning: #fab219;
+  --color-critical: #d03b3b;
+}
+
+html { color-scheme: dark; }
+body { @apply bg-[#111214] text-zinc-200 antialiased; }
+
+@media print {
+  body { background: white; color: black; }
+  .no-print { display: none !important; }
+  .print-plain { background: white !important; color: black !important; border-color: #ccc !important; }
+}

@@ -56,7 +56,11 @@ cd nova-inventory && .venv/Scripts/python -m uvicorn app.main:app --port 8002
 # terminal investigation through both Synapse MCP servers (verified 2026-11-24)
 cd signalops-backend && .venv/Scripts/python investigate.py
 ```
-TBD: backend server, frontend, live `synapse build --discover`.
+```bash
+cd signalops-backend  && .venv/Scripts/python -m uvicorn main:app --port 8000
+cd signalops-frontend && npm run dev        # open http://localhost:5173
+```
+TBD: live `synapse build --discover`.
 
 ## Rehearsals
 | # | Date | Steps passed | Notes |

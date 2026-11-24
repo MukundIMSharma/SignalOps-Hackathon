@@ -42,14 +42,14 @@
 - [x] Failure/partial result handling
 
 ## Milestone 4 — Frontend MVP
-- [ ] App shell/navigation
-- [ ] Dashboard
-- [ ] Investigation screen
-- [ ] Live activity
-- [ ] Evidence/findings
-- [ ] Impact visualizations
-- [ ] Recommendations
-- [ ] Connect backend
+- [x] App shell/navigation
+- [x] Dashboard
+- [x] Investigation screen
+- [x] Live activity
+- [x] Evidence/findings
+- [x] Impact visualizations
+- [x] Recommendations
+- [x] Connect backend
 
 ## Milestone 5 — Approval and audit
 - [ ] Action preview

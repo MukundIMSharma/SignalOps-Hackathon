@@ -29,3 +29,6 @@ Format: `date — decision — reason`
 - 2026-11-24 — New MCP sessions per request (investigation, overview, systems), runner installed globally (~2s) — no connection state to manage, and tools added by `synapse build --discover` appear without restarting the backend.
 - 2026-11-24 — Overview data also via MCP (not direct HTTP) — keeps the "business data only through Synapse" rule simple; direct HTTP only in /api/systems health checks.
 - 2026-11-24 — Report published before the LLM summary (`narrative.source: pending`) — Gemini free tier can take ~60s.
+- 2026-11-24 — Frontend uses Tailwind v4 with small hand-written components instead of the shadcn/ui CLI — same look (shadcn is copy-in Tailwind code), no Radix dependency tree, nothing interactive enough yet to need it.
+- 2026-11-24 — Charts follow the dataviz skill's reference palette (dark series blue #3987e5, fixed status colors with icon + text); only one single-series chart + one status split, so no categorical palette to validate.
+- 2026-11-24 — Cross-system questions A/B/C answered in a panel derived from the same report — the workflow is fixed; one run answers all three with evidence from both systems.
