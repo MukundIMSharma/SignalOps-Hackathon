@@ -6,10 +6,10 @@ from ..database import AS_OF, get_db
 from ..models import Order, SupportTicket
 from ..schemas import OrderHealth, OrderOut
 
-router = APIRouter(prefix="/analytics", tags=["analytics"])
+router = APIRouter(tags=["analytics"])
 
 
-@router.get("/order-health", response_model=OrderHealth, summary="Order health summary at the demo clock")
+@router.get("/analytics/order-health", response_model=OrderHealth, summary="Order health summary at the demo clock")
 def get_order_health(db: Session = Depends(get_db)):
     orders = [OrderOut.model_validate(o) for o in db.scalars(select(Order))]
     tickets = db.scalars(select(SupportTicket).where(SupportTicket.status == "open")).all()

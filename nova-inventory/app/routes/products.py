@@ -6,10 +6,10 @@ from ..database import get_db
 from ..models import Product
 from ..schemas import Page, ProductOut
 
-router = APIRouter(prefix="/products", tags=["products"])
+router = APIRouter(tags=["products"])
 
 
-@router.get("", response_model=Page[ProductOut], summary="Product catalog")
+@router.get("/products", response_model=Page[ProductOut], summary="Product catalog")
 def list_products(category: str | None = None, limit: int = Query(50, ge=1, le=200),
                   offset: int = Query(0, ge=0), db: Session = Depends(get_db)):
     stmt = select(Product)
@@ -20,7 +20,7 @@ def list_products(category: str | None = None, limit: int = Query(50, ge=1, le=2
     return Page[ProductOut](items=rows, total=total, limit=limit, offset=offset)
 
 
-@router.get("/{product_id}", response_model=ProductOut, summary="Product details")
+@router.get("/products/{product_id}", response_model=ProductOut, summary="Product details")
 def get_product_details(product_id: str, db: Session = Depends(get_db)):
     product = db.get(Product, product_id)
     if not product:

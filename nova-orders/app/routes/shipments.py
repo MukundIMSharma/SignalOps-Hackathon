@@ -6,10 +6,10 @@ from ..database import get_db
 from ..models import Shipment
 from ..schemas import Page, ShipmentOut
 
-router = APIRouter(prefix="/shipments", tags=["shipments"])
+router = APIRouter(tags=["shipments"])
 
 
-@router.get("", response_model=Page[ShipmentOut], summary="List shipments; filter by order, status or carrier")
+@router.get("/shipments", response_model=Page[ShipmentOut], summary="List shipments; filter by order, status or carrier")
 def get_shipment_status(
     order_id: str | None = None,
     status: str | None = Query(None, description="in_transit | delivered | exception"),

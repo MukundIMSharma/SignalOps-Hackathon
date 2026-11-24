@@ -59,8 +59,12 @@ Reserved for Milestone 6 live demo — **not implemented, a test asserts it is a
   "description": "Inventory synchronization failed; availability may be stale." }
 ```
 
-## MCP tools — PENDING Synapse (Milestone 2)
-Intended names = operationIds above. Replace this line with the names Synapse actually generates and which endpoints were selected.
+## MCP servers — BUILT (Milestone 2), tool calls not yet verified
+| Server | server_id | Base URL | Exposed tools |
+|---|---|---|---|
+| nova-orders | 6ab65632-0790-4e06-8b0e-77bb3d448920 | http://localhost:8001 | all Orders operationIds except `health` |
+| nova-inventory | bf451b7a-95c9-4658-b2a6-91708fb7ef84 | http://localhost:8002 | all Inventory operationIds except `health` |
+Confirm exact generated tool names from `list_tools` and record them here.
 
 ## Evidence schema — DRAFT
 ```json

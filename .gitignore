@@ -21,3 +21,6 @@ dist/
 Thumbs.db
 .vscode/
 .idea/
+
+# synapse project config holds the encrypted API key
+**/.synapse/config.json

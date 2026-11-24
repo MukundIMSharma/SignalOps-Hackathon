@@ -6,10 +6,10 @@ from ..database import get_db
 from ..models import Product, Stock
 from ..schemas import LowStockOut, Page, ProductStockOut, StockOut
 
-router = APIRouter(prefix="/stock", tags=["stock"])
+router = APIRouter(tags=["stock"])
 
 
-@router.get("", response_model=Page[StockOut], summary="Stock positions; filter by product or warehouse")
+@router.get("/stock", response_model=Page[StockOut], summary="Stock positions; filter by product or warehouse")
 def get_warehouse_inventory(product_id: str | None = None, warehouse_id: str | None = None,
                             limit: int = Query(100, ge=1, le=200), offset: int = Query(0, ge=0),
                             db: Session = Depends(get_db)):
@@ -23,7 +23,7 @@ def get_warehouse_inventory(product_id: str | None = None, warehouse_id: str | N
     return Page[StockOut](items=rows, total=total, limit=limit, offset=offset)
 
 
-@router.get("/low", response_model=Page[LowStockOut],
+@router.get("/stock/low", response_model=Page[LowStockOut],
             summary="Stock positions with available quantity below the product's reorder threshold")
 def get_low_stock_products(warehouse_id: str | None = None, db: Session = Depends(get_db)):
     stmt = (select(Stock, Product.reorder_threshold).join(Product)
@@ -36,7 +36,7 @@ def get_low_stock_products(warehouse_id: str | None = None, db: Session = Depend
     return Page[LowStockOut](items=items, total=len(items), limit=len(items), offset=0)
 
 
-@router.get("/{product_id}", response_model=ProductStockOut, summary="Stock for one product across all warehouses")
+@router.get("/stock/{product_id}", response_model=ProductStockOut, summary="Stock for one product across all warehouses")
 def get_product_stock(product_id: str, db: Session = Depends(get_db)):
     product = db.get(Product, product_id)
     if not product:

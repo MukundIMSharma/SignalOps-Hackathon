@@ -6,10 +6,10 @@ from ..database import get_db
 from ..models import SyncStatus
 from ..schemas import Page, SyncStatusOut
 
-router = APIRouter(prefix="/sync", tags=["sync"])
+router = APIRouter(tags=["sync"])
 
 
-@router.get("/status", response_model=Page[SyncStatusOut],
+@router.get("/sync/status", response_model=Page[SyncStatusOut],
             summary="Inventory synchronization status per warehouse source, including errors and affected SKUs")
 def get_inventory_sync_status(status: str | None = Query(None, description="success | failed"),
                               warehouse_id: str | None = None, db: Session = Depends(get_db)):

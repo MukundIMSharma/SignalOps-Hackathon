@@ -1,9 +1,9 @@
 # Progress
 
 **Last updated:** 2026-11-24
-**Current focus:** Milestone 2 — Synapse/MCP proof (blocked: Synapse API key)
-**Last completed:** Milestone 1 — both APIs built, seeded, 21/21 tests passing, run live on 8001/8002
-**Next up:** user sets Synapse key → `synapse init` in both APIs → build Auto MCP; user adds GEMINI_API_KEY to .env
+**Current focus:** Milestone 2 — test client calling both MCP servers (blocked: SYNAPSE_API_KEY in .env)
+**Last completed:** Both Synapse Auto MCP servers built (orders, inventory)
+**Next up:** list + call every tool on both servers, record names in CONTRACTS.md
 
 ## Milestone 0 — Setup / scope lock
 - [x] Create GitHub repo(s) — origin pushed
@@ -12,7 +12,7 @@
 - [ ] Create task board / issue list — using PROGRESS.md for now
 - [x] Set up environment and `.env.example` (`.env` itself not created)
 - [ ] Confirm model/API access — Gemini chosen; key + model id pending
-- [ ] Confirm Synapse CLI works — installed v0.1.9; build blocked on API key
+- [x] Confirm Synapse CLI works — v0.1.9, both builds succeeded
 
 ## Milestone 1 — Two APIs + seed data
 - [x] Orders schema/routes
@@ -23,9 +23,9 @@
 - [x] Health endpoints
 
 ## Milestone 2 — Synapse/MCP proof
-- [ ] Generate Orders MCP
-- [ ] Generate Inventory MCP
-- [ ] Select endpoints
+- [x] Generate Orders MCP
+- [x] Generate Inventory MCP
+- [x] Select endpoints
 - [ ] Connect both to test client
 - [ ] Test representative tools
 - [ ] Save configuration and instructions

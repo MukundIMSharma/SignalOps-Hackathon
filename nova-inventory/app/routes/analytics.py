@@ -6,10 +6,10 @@ from ..database import AS_OF, get_db
 from ..models import Product, Stock, SyncStatus, Warehouse
 from ..schemas import StockHealth
 
-router = APIRouter(prefix="/analytics", tags=["analytics"])
+router = APIRouter(tags=["analytics"])
 
 
-@router.get("/stock-health", response_model=StockHealth, summary="Stock and sync health summary")
+@router.get("/analytics/stock-health", response_model=StockHealth, summary="Stock and sync health summary")
 def get_stock_health(db: Session = Depends(get_db)):
     thresholds = dict(db.execute(select(Product.product_id, Product.reorder_threshold)).all())
     stock = db.scalars(select(Stock)).all()

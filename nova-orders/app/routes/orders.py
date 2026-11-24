@@ -8,7 +8,7 @@ from ..database import AS_OF, get_db
 from ..models import Order
 from ..schemas import OrderOut, Page
 
-router = APIRouter(prefix="/orders", tags=["orders"])
+router = APIRouter(tags=["orders"])
 
 
 def paged(db: Session, stmt, limit: int, offset: int) -> Page[OrderOut]:
@@ -17,7 +17,7 @@ def paged(db: Session, stmt, limit: int, offset: int) -> Page[OrderOut]:
     return Page[OrderOut](items=rows, total=total, limit=limit, offset=offset)
 
 
-@router.get("", response_model=Page[OrderOut], summary="List orders with filters and pagination")
+@router.get("/orders", response_model=Page[OrderOut], summary="List orders with filters and pagination")
 def list_orders(
     status: str | None = None,
     priority: str | None = None,
@@ -42,7 +42,7 @@ def list_orders(
     return paged(db, stmt, limit, offset)
 
 
-@router.get("/delayed", response_model=Page[OrderOut], summary="Delayed orders (any cause)")
+@router.get("/orders/delayed", response_model=Page[OrderOut], summary="Delayed orders (any cause)")
 def get_delayed_orders(
     product_id: str | None = None,
     warehouse_id: str | None = None,
@@ -59,7 +59,7 @@ def get_delayed_orders(
     return paged(db, stmt, limit, offset)
 
 
-@router.get("/at-risk", response_model=Page[OrderOut],
+@router.get("/orders/at-risk", response_model=Page[OrderOut],
             summary="Delayed, undispatched orders whose dispatch date has not passed yet (will breach SLA if not unblocked)")
 def get_at_risk_orders(limit: int = Query(100, ge=1, le=200), offset: int = Query(0, ge=0),
                    db: Session = Depends(get_db)):
@@ -69,7 +69,7 @@ def get_at_risk_orders(limit: int = Query(100, ge=1, le=200), offset: int = Quer
     return paged(db, stmt, limit, offset)
 
 
-@router.get("/{order_id}", response_model=OrderOut, summary="Order detail")
+@router.get("/orders/{order_id}", response_model=OrderOut, summary="Order detail")
 def get_order_details(order_id: str, db: Session = Depends(get_db)):
     order = db.get(Order, order_id)
     if not order:

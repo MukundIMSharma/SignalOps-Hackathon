@@ -6,10 +6,10 @@ from ..database import get_db
 from ..models import SupportTicket
 from ..schemas import Page, TicketOut
 
-router = APIRouter(prefix="/tickets", tags=["support tickets"])
+router = APIRouter(tags=["support tickets"])
 
 
-@router.get("", response_model=Page[TicketOut], summary="Support tickets; filter by customer, order, category, status")
+@router.get("/tickets", response_model=Page[TicketOut], summary="Support tickets; filter by customer, order, category, status")
 def get_support_tickets(
     customer_id: str | None = None,
     order_id: str | None = None,
