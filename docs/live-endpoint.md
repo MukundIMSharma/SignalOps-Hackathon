@@ -53,21 +53,31 @@ from .routes import analytics, incidents, products, stock, sync, warehouses
 for r in (products, stock, warehouses, sync, analytics, incidents):
 ```
 
-## 3. Restart, discover, verify
-```bash
-# restart the inventory API (Ctrl+C its terminal, then)
-cd nova-inventory && .venv/Scripts/python -m uvicorn app.main:app --port 8002
-curl localhost:8002/inventory/incidents            # INV-2026-042, SKU-104, W1, critical
+## 3. Restart, discover, verify (PowerShell)
+In the **nova-inventory :8002** window: Ctrl+C, then type (don't use ↑, it shows other windows' commands):
+```powershell
+.venv\Scripts\python -m uvicorn app.main:app --port 8002
+```
+In a separate terminal from the project folder:
+```powershell
+curl.exe http://127.0.0.1:8002/inventory/incidents   # INV-2026-042, SKU-104, W1, critical
+cd nova-inventory
 # rebuild the MCP server from the changed code (same server name keeps the same server_id)
-synapse -y build --auto --discover --server-name nova-inventory --base-url http://localhost:8002 \
-  --endpoints "list_products,get_product_details,get_warehouse_inventory,get_low_stock_products,get_product_stock,get_warehouse_status,get_inventory_sync_status,get_stock_health,get_inventory_incidents"
+synapse -y build --auto --discover --server-name nova-inventory --base-url http://localhost:8002 --endpoints "list_products,get_product_details,get_warehouse_inventory,get_low_stock_products,get_product_stock,get_warehouse_status,get_inventory_sync_status,get_stock_health,get_inventory_incidents"
+cd ..
 ```
 4. UI → Systems / MCP → **Refresh tools**: `get_inventory_incidents` shows **★ newly discovered** (open the page once *before* step 1 so the baseline is the old tool list).
 5. UI → Investigations → **Run investigation**: activity shows **★ New capability in use: get_inventory_incidents**, root cause gains evidence `Inventory system incident INV-2026-042 (critical)…`.
 
-## Reset after a rehearsal
-```bash
-git checkout nova-inventory/app/main.py && rm nova-inventory/app/routes/incidents.py
-# restart inventory API, then rebuild WITHOUT get_inventory_incidents (command from docs/synapse-setup.md)
+## Reset after a rehearsal (PowerShell, from the project folder)
+```powershell
+git checkout nova-inventory/app/main.py
+Remove-Item nova-inventory\app\routes\incidents.py
+```
+Restart the **nova-inventory :8002** window as in step 3, then rebuild WITHOUT `get_inventory_incidents`:
+```powershell
+cd nova-inventory
+synapse -y build --auto --server-name nova-inventory --base-url http://localhost:8002 --endpoints "list_products,get_product_details,get_warehouse_inventory,get_low_stock_products,get_product_stock,get_warehouse_status,get_inventory_sync_status,get_stock_health"
+cd ..
 ```
 After the real demo: keep the endpoint, flip the absence assert in `nova-inventory/tests/test_api.py` into a test for it, commit.

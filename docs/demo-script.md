@@ -2,10 +2,19 @@
 
 **Before going on stage**
 1. `powershell -File scripts\start-demo.ps1 -Reset` → all four "up".
-2. `python scripts\rehearse.py 1`, then **restart the backend window** (clears the rehearsal's transfer), then open **Systems / MCP** once (sets the "newly discovered" baseline: 9 + 8 tools).
+2. `python scripts\rehearse.py 1`, then **restart the backend window** (see below; clears the rehearsal's transfer), then open **Systems / MCP** once (sets the "newly discovered" baseline: 9 + 8 tools).
 3. Run one investigation in the UI to warm Gemini (optional), then restart the backend again for a clean history.
 4. Open `docs/live-endpoint.md` in an editor; have a terminal in `nova-inventory/` and the inventory API window ready.
 5. Backup: `docs/demo-backup/*.png` + recorded video.
+
+**Restarting a service window** (the windows opened by `start-demo.ps1` have no ↑ history for their command, and ↑ shows commands from other windows; type it):
+
+| Window title | Ctrl+C, then type |
+|---|---|
+| `signalops-backend :8000` | `.venv\Scripts\python -m uvicorn main:app --port 8000` |
+| `nova-inventory :8002` | `.venv\Scripts\python -m uvicorn app.main:app --port 8002` |
+
+Each window already opens in its own folder; no `cd` needed. Ready when it prints `Application startup complete`.
 
 | Time | Screen | Say |
 |---|---|---|
