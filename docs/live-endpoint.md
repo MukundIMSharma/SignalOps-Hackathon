@@ -60,11 +60,10 @@ In the **nova-inventory :8002** window: Ctrl+C, then type (don't use ↑, it sho
 ```
 In a separate terminal from the project folder:
 ```powershell
-curl.exe http://127.0.0.1:8002/inventory/incidents   # INV-2026-042, SKU-104, W1, critical
-cd nova-inventory
-# rebuild the MCP server from the changed code (same server name keeps the same server_id)
-synapse -y build --auto --discover --server-name nova-inventory --base-url http://localhost:8002 --endpoints "list_products,get_product_details,get_warehouse_inventory,get_low_stock_products,get_product_stock,get_warehouse_status,get_inventory_sync_status,get_stock_health,get_inventory_incidents"
-cd ..
+curl.exe http://127.0.0.1:8002/inventory/incidents   # must show INV-2026-042 (SKU-104, W1, critical); "Not Found" = main.py not edited or API not restarted
+# rebuild the MCP server from the changed code (same server name keeps the same server_id).
+# One line on purpose: Synapse must run inside nova-inventory/ (where .synapse/ lives), and the line returns to the project folder.
+cd nova-inventory; synapse -y build --auto --discover --server-name nova-inventory --base-url http://localhost:8002 --endpoints "list_products,get_product_details,get_warehouse_inventory,get_low_stock_products,get_product_stock,get_warehouse_status,get_inventory_sync_status,get_stock_health,get_inventory_incidents"; cd ..
 ```
 4. UI → Systems / MCP → **Refresh tools**: `get_inventory_incidents` shows **★ newly discovered** (open the page once *before* step 1 so the baseline is the old tool list).
 5. UI → Investigations → **Run investigation**: activity shows **★ New capability in use: get_inventory_incidents**, root cause gains evidence `Inventory system incident INV-2026-042 (critical)…`.
@@ -76,8 +75,6 @@ Remove-Item nova-inventory\app\routes\incidents.py
 ```
 Restart the **nova-inventory :8002** window as in step 3, then rebuild WITHOUT `get_inventory_incidents`:
 ```powershell
-cd nova-inventory
-synapse -y build --auto --server-name nova-inventory --base-url http://localhost:8002 --endpoints "list_products,get_product_details,get_warehouse_inventory,get_low_stock_products,get_product_stock,get_warehouse_status,get_inventory_sync_status,get_stock_health"
-cd ..
+cd nova-inventory; synapse -y build --auto --server-name nova-inventory --base-url http://localhost:8002 --endpoints "list_products,get_product_details,get_warehouse_inventory,get_low_stock_products,get_product_stock,get_warehouse_status,get_inventory_sync_status,get_stock_health"; cd ..
 ```
 After the real demo: keep the endpoint, flip the absence assert in `nova-inventory/tests/test_api.py` into a test for it, commit.
